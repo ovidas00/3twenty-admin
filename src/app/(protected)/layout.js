@@ -5,11 +5,10 @@ import {
   Menu,
   User,
   Home,
-  BarChart3,
+  Layers,
   Users,
   Settings,
   FileText,
-  Calendar,
   X,
   LogOut,
   ChevronUp,
@@ -31,10 +30,9 @@ const Layout = ({ children }) => {
 
   const navigation = [
     { name: "Dashboard", href: "/", icon: Home },
-    { name: "Analytics", href: "/analytics", icon: BarChart3 },
     { name: "Users", href: "/users", icon: Users },
     { name: "Documents", href: "/documents", icon: FileText },
-    { name: "Calendar", href: "/calendar", icon: Calendar },
+    { name: "Phases", href: "/phases", icon: Layers },
     {
       name: "Settings",
       icon: Settings,
@@ -226,9 +224,7 @@ const Layout = ({ children }) => {
         </header>
 
         {/* Content */}
-        <main className="flex-1 overflow-y-auto bg-gray-50 p-2">
-          {children}
-        </main>
+        <main className="flex-1 overflow-y-auto bg-gray-100">{children}</main>
       </div>
     </div>
   );

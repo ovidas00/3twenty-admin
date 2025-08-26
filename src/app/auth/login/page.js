@@ -6,6 +6,8 @@ import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import api from "@/lib/api";
 import Image from "next/image";
+import Button from "@/components/ui/Button";
+import Input from "@/components/ui/Input";
 
 const LoginPage = () => {
   const router = useRouter();
@@ -47,19 +49,21 @@ const LoginPage = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 to-slate-800 flex items-center justify-center p-0 md:p-4">
-      <div className="w-full max-w-md">
+      <div className="w-full max-w-[400px]">
         {/* Login Card */}
         <div className="bg-white rounded-0 rounded-xl shadow-xl border border-slate-200 p-8">
           {/* Header */}
           <div className="text-center mb-8">
             <Image
-              src="/icon-300x100.png"
+              src="/icon-300x60.png"
               alt="Logo"
               width={300}
               height={100}
               className="mx-auto"
             />
-            <p className="text-slate-600">Sign in to access the dashboard</p>
+            <p className="text-slate-600 p-2">
+              Sign in to access the dashboard
+            </p>
           </div>
 
           {/* Alert Message */}
@@ -78,85 +82,60 @@ const LoginPage = () => {
           {/* Login Form */}
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Username Field */}
-            <div>
-              <label
-                htmlFor="username"
-                className="block text-sm font-medium text-slate-700 mb-2"
-              >
-                Username
-              </label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <User className="h-5 w-5 text-slate-400" />
-                </div>
-                <input
-                  id="username"
-                  name="username"
-                  type="text"
-                  required
-                  value={formData.username}
-                  onChange={handleChange}
-                  className="block w-full pl-10 pr-3 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-slate-900 focus:border-slate-900 transition duration-200 text-slate-900 placeholder-slate-500"
-                  placeholder="Enter your username"
-                />
-              </div>
-            </div>
+            <Input
+              id="username"
+              name="username"
+              type="text"
+              label="Username"
+              icon={User}
+              required={true}
+              value={formData.username}
+              onChange={handleChange}
+              placeholder="Enter your username"
+            />
 
             {/* Password Field */}
-            <div>
-              <label
-                htmlFor="password"
-                className="block text-sm font-medium text-slate-700 mb-2"
+            <div className="relative">
+              <Input
+                id="password"
+                name="password"
+                type={showPassword ? "text" : "password"}
+                label="Password"
+                icon={Lock}
+                required={true}
+                value={formData.password}
+                onChange={handleChange}
+                placeholder="Enter your password"
+                className="pr-12" // Add extra padding for the toggle button
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute inset-y-0 right-0 pr-3 flex items-center hover:text-slate-600 transition duration-200"
+                style={{
+                  top: "50%",
+                  transform: "translateY(-50%)",
+                  marginTop: "0.9rem",
+                }} // Vertically center the button
               >
-                Password
-              </label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Lock className="h-5 w-5 text-slate-400" />
-                </div>
-                <input
-                  id="password"
-                  name="password"
-                  type={showPassword ? "text" : "password"}
-                  required
-                  value={formData.password}
-                  onChange={handleChange}
-                  className="block w-full pl-10 pr-12 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-slate-900 focus:border-slate-900 transition duration-200 text-slate-900 placeholder-slate-500"
-                  placeholder="Enter your password"
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute inset-y-0 right-0 pr-3 flex items-center hover:text-slate-600 transition duration-200"
-                >
-                  {showPassword ? (
-                    <EyeOff className="h-5 w-5 text-slate-400" />
-                  ) : (
-                    <Eye className="h-5 w-5 text-slate-400" />
-                  )}
-                </button>
-              </div>
+                {showPassword ? (
+                  <EyeOff className="h-5 w-5 text-slate-400" />
+                ) : (
+                  <Eye className="h-5 w-5 text-slate-400" />
+                )}
+              </button>
             </div>
 
-            {/* Login Button */}
-            <button
+            <Button
               type="submit"
-              disabled={
-                loginMutation.isPending ||
-                !formData.username ||
-                !formData.password
-              }
-              className="w-full bg-slate-900 hover:bg-slate-800 disabled:bg-slate-400 disabled:cursor-not-allowed text-white font-semibold py-3 px-4 rounded-lg transition duration-200 focus:outline-none focus:ring-2 focus:ring-slate-900 focus:ring-offset-2"
+              variant="dark"
+              size="lg"
+              className="w-full"
+              isLoading={loginMutation.isPending}
+              disabled={!formData.username || !formData.password}
             >
-              {loginMutation.isPending ? (
-                <div className="flex items-center justify-center">
-                  <div className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent mr-2"></div>
-                  Signing in...
-                </div>
-              ) : (
-                "Sign In"
-              )}
-            </button>
+              {loginMutation.isPending ? "Signing in..." : "Sign In"}
+            </Button>
           </form>
         </div>
       </div>
