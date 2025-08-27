@@ -1,30 +1,41 @@
 "use client";
 
 import { Users, UserCheck, UserX, Activity } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import api from "@/lib/api";
 
 const UserCards = () => {
+  const { data: userStats } = useQuery({
+    queryKey: ["userstats"],
+    queryFn: async () => {
+      const response = await api.get("/dashboard/user-stats");
+
+      return response.data.payload.userStats;
+    },
+  });
+
   const cards = [
     {
       title: "Total Users",
-      value: "1,250",
+      value: new Intl.NumberFormat().format(userStats?.total ?? 0),
       icon: <Users className="w-6 h-6 text-white" />,
       bgColor: "bg-blue-500",
     },
     {
       title: "Active Users",
-      value: "980",
+      value: new Intl.NumberFormat().format(userStats?.active ?? 0),
       icon: <UserCheck className="w-6 h-6 text-white" />,
       bgColor: "bg-green-500",
     },
     {
       title: "Inactive Users",
-      value: "270",
+      value: new Intl.NumberFormat().format(userStats?.inactive ?? 0),
       icon: <UserX className="w-6 h-6 text-white" />,
       bgColor: "bg-red-500",
     },
     {
       title: "Activation Ratio",
-      value: "78%",
+      value: `${userStats?.activationRatio ?? 0}%`,
       icon: <Activity className="w-6 h-6 text-white" />,
       bgColor: "bg-purple-500",
     },

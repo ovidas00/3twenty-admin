@@ -105,7 +105,7 @@ const Layout = ({ children }) => {
           </div>
           <button
             onClick={() => setSidebarOpen(false)}
-            className="lg:hidden p-1 rounded-md text-gray-400 hover:text-white hover:bg-gray-800"
+            className="lg:hidden p-1 rounded-md cursor-pointer text-gray-400 hover:text-white hover:bg-gray-800"
           >
             <X className="h-5 w-5" />
           </button>
@@ -214,7 +214,7 @@ const Layout = ({ children }) => {
           <div className="flex items-center">
             <button
               onClick={() => setSidebarOpen(true)}
-              className="lg:hidden p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100"
+              className="lg:hidden p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-600 md:hover:bg-gray-100 cursor-pointer"
             >
               <Menu className="h-5 w-5" />
             </button>
