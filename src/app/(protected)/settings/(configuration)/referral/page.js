@@ -6,6 +6,7 @@ import api from "@/lib/api";
 import { ConfigContext } from "../layout";
 import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
+import Alert from "@/components/ui/Alert";
 
 const ReferralPage = () => {
   const { PROFIT_MAP } = useContext(ConfigContext) || {};
@@ -57,21 +58,17 @@ const ReferralPage = () => {
   };
 
   return (
-    <div className="bg-white p-4 md:p-6">
+    <div className="bg-white p-4 md:p-6 rounded-lg shadow-sm border border-gray-200">
       <form
         onSubmit={handleSubmit}
         className="grid grid-cols-1 md:grid-cols-3 gap-4"
       >
         {message && (
-          <div
-            className={`col-span-full p-2 rounded-md text-sm ${
-              message.type === "success"
-                ? "bg-green-100 text-green-700"
-                : "bg-red-100 text-red-700"
-            }`}
-          >
-            {message.text}
-          </div>
+          <Alert
+            message={message.text}
+            type={message.type}
+            className="col-span-full"
+          />
         )}
 
         {Object.entries(formData).map(([level, value]) => (

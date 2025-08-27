@@ -8,7 +8,6 @@ import {
   Layers,
   Users,
   Settings,
-  FileText,
   X,
   LogOut,
   ChevronUp,
@@ -31,7 +30,6 @@ const Layout = ({ children }) => {
   const navigation = [
     { name: "Dashboard", href: "/", icon: Home },
     { name: "Users", href: "/users", icon: Users },
-    { name: "Documents", href: "/documents", icon: FileText },
     { name: "Phases", href: "/phases", icon: Layers },
     {
       name: "Settings",
@@ -212,7 +210,7 @@ const Layout = ({ children }) => {
       {/* Main area */}
       <div className="flex-1 flex flex-col overflow-hidden">
         {/* Header */}
-        <header className="flex-shrink-0 h-16 bg-white border-b border-gray-200 shadow-sm flex items-center justify-between px-4 sm:px-6 lg:px-8">
+        <header className="flex-shrink-0 h-16 bg-gray-800 md:bg-white border-b border-gray-200 shadow-sm flex items-center justify-between px-4 sm:px-6 lg:px-8">
           <div className="flex items-center">
             <button
               onClick={() => setSidebarOpen(true)}

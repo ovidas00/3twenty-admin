@@ -1,14 +1,10 @@
 import React from "react";
 
-const Input = ({
+const Select = ({
   id,
   name,
-  type = "text",
   label,
   hideLabel = false,
-  icon: Icon,
-  endIcon: EndIcon,
-  placeholder = "",
   value,
   onChange,
   onBlur,
@@ -21,11 +17,13 @@ const Input = ({
   errorMessage,
   className = "",
   containerClassName = "",
+  options = [],
+  placeholder = "Select an option",
   ...props
 }) => {
-  // Base classes that apply to all inputs
+  // Base classes for all selects
   const baseClasses =
-    "block w-full rounded-lg border focus:outline-none transition duration-200 text-slate-900 placeholder-slate-500";
+    "block w-full rounded-lg border focus:outline-none transition duration-200 text-slate-900";
 
   // Variant classes
   const variantClasses = {
@@ -50,30 +48,24 @@ const Input = ({
 
   // Size classes
   const sizeClasses = {
-    sm: "py-2.5 text-sm",
-    md: "py-3 text-base",
-    lg: "py-4 text-lg",
+    sm: "px-1 py-2.5 text-sm",
+    md: "px-1 py-3 text-base",
+    lg: "px-1 py-4 text-lg",
   };
 
-  // Padding based on icon presence
-  const paddingClasses = Icon ? "pl-10 pr-3" : "px-3";
-  const endPaddingClasses = EndIcon ? "pr-10" : "";
-
-  // Disabled and read-only states
+  // Disabled/read-only classes
   const stateClasses = disabled
     ? "opacity-60 cursor-not-allowed bg-slate-100"
     : readOnly
     ? "bg-slate-50 cursor-default"
     : "bg-white";
 
-  // Combine all classes
-  const inputClasses = `
+  // Combine classes
+  const selectClasses = `
     ${baseClasses}
     ${variantClasses[variant]}
     ${validationClasses[validationState]}
     ${sizeClasses[size]}
-    ${paddingClasses}
-    ${endPaddingClasses}
     ${stateClasses}
     ${className}
   `
@@ -100,38 +92,28 @@ const Input = ({
         </label>
       )}
 
-      <div className="relative">
-        {Icon && (
-          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-            <Icon
-              className={`h-5 w-5 ${
-                validationState === "error" ? "text-red-500" : "text-slate-400"
-              }`}
-            />
-          </div>
+      <select
+        id={id}
+        name={name}
+        value={value}
+        onChange={onChange}
+        onBlur={onBlur}
+        required={required}
+        disabled={disabled}
+        className={selectClasses}
+        {...props}
+      >
+        {placeholder && (
+          <option value="" disabled hidden>
+            {placeholder}
+          </option>
         )}
-
-        <input
-          id={id}
-          name={name}
-          type={type}
-          required={required}
-          disabled={disabled}
-          readOnly={readOnly}
-          value={value}
-          onChange={onChange}
-          onBlur={onBlur}
-          className={inputClasses}
-          placeholder={placeholder}
-          {...props}
-        />
-
-        {EndIcon && (
-          <div className="absolute inset-y-0 right-0 pr-3 flex items-center">
-            {EndIcon}
-          </div>
-        )}
-      </div>
+        {options.map((opt) => (
+          <option key={opt.value} value={opt.value}>
+            {opt.label}
+          </option>
+        ))}
+      </select>
 
       {validationState === "error" && errorMessage && (
         <p className={errorClasses}>{errorMessage}</p>
@@ -140,4 +122,4 @@ const Input = ({
   );
 };
 
-export default Input;
+export default Select;

@@ -1,11 +1,20 @@
 "use client";
 
-import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import api from "@/lib/api";
-import { Edit, Plus } from "lucide-react";
+import { Edit, Plus, Layers } from "lucide-react";
 import Button from "@/components/ui/Button";
+import AddModal from "@/components/phases/AddModal";
+import UpdateModal from "@/components/phases/UpdateModal";
+import toast from "react-hot-toast";
 
 const PhasesPage = () => {
+  const queryClient = useQueryClient();
+  const [selectedPhase, setSelectedPhase] = useState(null);
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
+
   const { data } = useQuery({
     queryKey: ["phases"],
     queryFn: async () => {
@@ -20,8 +29,6 @@ const PhasesPage = () => {
       year: "numeric",
       month: "short",
       day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
     });
   };
 
@@ -33,110 +40,171 @@ const PhasesPage = () => {
     }).format(amount);
   };
 
-  return (
-    <div className="p-4 md:p-6">
-      <div className="max-w-6xl mx-auto">
-        {/* Table Card */}
-        <div className="bg-white overflow-hidden">
-          {/* Card Header */}
-          <div className="flex justify-between items-start gap-4 px-4 py-4 md:px-6 border-b border-gray-200">
-            <h2 className="text-xl md:text-2xl font-bold text-gray-900">
-              Phases
-            </h2>
-            <Button>
-              <Plus className="w-5 h-5" />
-              Add Phase
-            </Button>
-          </div>
+  const activeMutation = useMutation({
+    mutationFn: (id) => api.post(`/phases/${id}/activate`),
+    onSuccess: (response) => {
+      toast.success(response.data.message);
+      queryClient.invalidateQueries({ queryKey: ["phases"] });
+    },
+    onError: (error) => toast.error(error.response?.data?.message),
+  });
 
-          {/* Single Table View (for all screens) */}
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Name
-                  </th>
-                  <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Start Date
-                  </th>
-                  <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    End Date
-                  </th>
-                  <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Supply
-                  </th>
-                  <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Price
-                  </th>
-                  <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Action
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-200">
-                {data && data.length > 0 ? (
-                  data.map((phase) => (
-                    <tr key={phase.id}>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="flex items-center">
-                          <span className="text-sm font-medium text-gray-900">
-                            {phase.name}
-                          </span>
-                          {phase.isActive && (
-                            <span className="ml-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                              Active
+  return (
+    <>
+      {/* Add Modal */}
+      <AddModal
+        isOpen={isAddModalOpen}
+        onClose={() => setIsAddModalOpen(false)}
+      />
+
+      {/* Update Modal */}
+      <UpdateModal
+        isOpen={isUpdateModalOpen}
+        onClose={() => setIsUpdateModalOpen(false)}
+        selectedPhase={selectedPhase}
+      />
+
+      <div className="p-4 md:p-6">
+        <div className="max-w-6xl mx-auto">
+          {/* Table Card */}
+          <div className="bg-white overflow-hidden rounded-lg shadow-sm border border-gray-200">
+            {/* Card Header */}
+            <div className="flex justify-between items-start gap-4 px-4 py-4 md:px-6 border-b border-gray-200">
+              <h2 className="text-xl md:text-2xl font-bold text-gray-900">
+                Phases
+              </h2>
+              <Button
+                className="font-semibold"
+                variant="dark"
+                onClick={() => setIsAddModalOpen(true)}
+                icon={<Plus className="w-4 h-4" />}
+              >
+                Add Phase
+              </Button>
+            </div>
+
+            {/* Table */}
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Name
+                    </th>
+                    <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Start Date
+                    </th>
+                    <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      End Date
+                    </th>
+                    <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Supply
+                    </th>
+                    <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Price
+                    </th>
+                    <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Active
+                    </th>
+                    <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Last Updated
+                    </th>
+                    <th className="px-6 py-4 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Action
+                    </th>
+                  </tr>
+                </thead>
+
+                <tbody className="divide-y divide-gray-200">
+                  {data && data.length > 0 ? (
+                    data.map((phase) => (
+                      <tr key={phase.id}>
+                        <td className="px-4 py-4 whitespace-nowrap">
+                          <div className="flex items-center">
+                            <span className="text-sm font-medium text-gray-900">
+                              {phase.name}
                             </span>
-                          )}
+                          </div>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                          {formatDate(phase.start)}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                          {formatDate(phase.end)}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                          {phase.supply.toLocaleString()}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                          {formatCurrency(phase.price)}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                          <span
+                            onClick={() => {
+                              if (!phase.isActive) {
+                                if (
+                                  confirm(
+                                    "Activate this phase? This will update token price and supply."
+                                  )
+                                ) {
+                                  activeMutation.mutate(phase.id);
+                                }
+                              }
+                            }}
+                            className={`cursor-pointer inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium ${
+                              phase.isActive
+                                ? "bg-green-100 text-green-800"
+                                : "bg-red-100 text-red-800"
+                            }`}
+                          >
+                            {phase.isActive ? "Active" : "Inactive"}
+                          </span>
+                        </td>
+
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                          {formatDate(phase.updatedAt)}
+                        </td>
+
+                        <td className="px-6 py-4 whitespace-nowrap text-right">
+                          <Button
+                            variant="outline"
+                            className="hover:bg-gray-100 font-semibold"
+                            size="sm"
+                            icon={<Edit className="w-4 h-4" />}
+                            onClick={() => {
+                              setSelectedPhase(phase);
+                              setIsUpdateModalOpen(true);
+                            }}
+                          >
+                            Edit
+                          </Button>
+                        </td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td colSpan="8" className="px-6 py-12 text-center">
+                        <div className="flex flex-col items-center justify-center space-y-1">
+                          <div className="text-gray-400">
+                            <Layers className="w-12 h-12 mx-auto mb-2 text-gray-300" />
+                          </div>
+                          <div className="text-lg font-medium text-gray-600">
+                            No phases found
+                          </div>
+                          <p className="text-sm text-gray-500">
+                            Get started by adding a first phase
+                          </p>
                         </div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                        {formatDate(phase.start)}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                        {formatDate(phase.end)}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                        {phase.supply.toLocaleString()}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                        {formatCurrency(phase.price)}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <Button
-                          variant="outline"
-                          className="hover:bg-gray-100"
-                          size="sm"
-                          icon={<Edit className="w-4 h-4" />}
-                        >
-                          Edit
-                        </Button>
                       </td>
                     </tr>
-                  ))
-                ) : (
-                  <tr>
-                    <td
-                      colSpan="6"
-                      className="px-6 py-8 text-center text-gray-500"
-                    >
-                      <div className="flex flex-col items-center justify-center">
-                        <div className="text-gray-400 mb-2">
-                          No phases found
-                        </div>
-                        <p className="text-sm text-gray-500">
-                          Get started by adding your first phase
-                        </p>
-                      </div>
-                    </td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
+                  )}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

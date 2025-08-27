@@ -8,6 +8,7 @@ import api from "@/lib/api";
 import Image from "next/image";
 import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
+import Alert from "@/components/ui/Alert";
 
 const LoginPage = () => {
   const router = useRouter();
@@ -68,15 +69,7 @@ const LoginPage = () => {
 
           {/* Alert Message */}
           {alert && (
-            <div
-              className={`mb-4 p-2 rounded-md text-sm ${
-                alert.type === "success"
-                  ? "bg-green-100 text-green-800"
-                  : "bg-red-100 text-red-800  "
-              }`}
-            >
-              {alert.message}
-            </div>
+            <Alert type={alert.type} message={alert.message} className="mb-4" />
           )}
 
           {/* Login Form */}
@@ -134,7 +127,7 @@ const LoginPage = () => {
               isLoading={loginMutation.isPending}
               disabled={!formData.username || !formData.password}
             >
-              {loginMutation.isPending ? "Signing in..." : "Sign In"}
+              {loginMutation.isPending ? "Logging in..." : "Login"}
             </Button>
           </form>
         </div>

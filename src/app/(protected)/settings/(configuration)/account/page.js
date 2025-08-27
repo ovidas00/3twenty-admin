@@ -6,6 +6,7 @@ import { useMutation } from "@tanstack/react-query";
 import api from "@/lib/api";
 import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
+import Alert from "@/components/ui/Alert";
 
 const ActivationPage = () => {
   const config = useContext(ConfigContext);
@@ -42,19 +43,9 @@ const ActivationPage = () => {
   };
 
   return (
-    <div className="bg-white p-4 md:p-6">
+    <div className="bg-white p-4 md:p-6 rounded-lg shadow-sm border border-gray-200">
       <form onSubmit={handleSubmit} className="space-y-6">
-        {message && (
-          <div
-            className={`p-2 rounded-md text-sm ${
-              message.type === "success"
-                ? "bg-green-100 text-green-700"
-                : "bg-red-100 text-red-700"
-            }`}
-          >
-            {message.text}
-          </div>
-        )}
+        {message && <Alert message={message.text} type={message.type} />}
         <Input
           type="number"
           step="0.01"
