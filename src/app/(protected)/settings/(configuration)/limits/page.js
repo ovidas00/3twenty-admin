@@ -9,7 +9,9 @@ import Input from "@/components/ui/Input";
 import Alert from "@/components/ui/Alert";
 
 const LimitsPage = () => {
-  const { DEPOSIT_SETTINGS } = useContext(ConfigContext) || {};
+  const { minimumDeposit, minimumWithdraw, minimumBuyToken } =
+    useContext(ConfigContext) || {};
+
   const [formData, setFormData] = useState({
     minimumDeposit: 0,
     minimumWithdraw: 0,
@@ -19,14 +21,12 @@ const LimitsPage = () => {
 
   // Set initial form data from config
   useEffect(() => {
-    if (DEPOSIT_SETTINGS) {
-      setFormData({
-        minimumDeposit: DEPOSIT_SETTINGS.minimumDeposit || 0,
-        minimumWithdraw: DEPOSIT_SETTINGS.minimumWithdraw || 0,
-        minimumBuyToken: DEPOSIT_SETTINGS.minimumBuyToken || 0,
-      });
-    }
-  }, [DEPOSIT_SETTINGS]);
+    setFormData({
+      minimumDeposit: minimumDeposit || 0,
+      minimumWithdraw: minimumWithdraw || 0,
+      minimumBuyToken: minimumBuyToken || 0,
+    });
+  }, [minimumDeposit, minimumWithdraw, minimumBuyToken]);
 
   const updateMutation = useMutation({
     mutationFn: () =>
