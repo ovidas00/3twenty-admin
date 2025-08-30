@@ -142,10 +142,10 @@ const Layout = ({ children }) => {
                       <a
                         key={child.name}
                         href={child.href}
-                        className={`block px-3 py-2 text-gray-300 hover:bg-gray-700 hover:text-white rounded-lg text-sm ${
+                        className={`block px-3 py-2 rounded-lg text-sm ${
                           pathname === child.href
                             ? "bg-gray-700 text-blue-500"
-                            : ""
+                            : "text-gray-300 hover:bg-gray-700 hover:text-white"
                         }`}
                       >
                         {child.name}
