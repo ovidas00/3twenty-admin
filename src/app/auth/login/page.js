@@ -50,7 +50,7 @@ const LoginPage = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 to-slate-800 flex items-center justify-center p-0 md:p-4">
-      <div className="w-full max-w-[400px]">
+      <div className="w-[95%] max-w-[400px]">
         {/* Login Card */}
         <div className="bg-white rounded-0 rounded-xl shadow-xl border border-slate-200 p-8">
           {/* Header */}
