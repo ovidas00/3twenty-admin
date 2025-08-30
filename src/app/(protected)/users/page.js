@@ -4,12 +4,13 @@ import { useState, useEffect } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter, useSearchParams } from "next/navigation";
 import api from "@/lib/api";
-import { Users, Search, Filter, Eye } from "lucide-react";
+import { Users, Search, Filter, Eye, Ban } from "lucide-react";
 import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
 import Select from "@/components/ui/Select";
 import ViewModal from "@/components/users/ViewModal";
 import toast from "react-hot-toast";
+import Swal from "sweetalert2";
 
 const UsersPage = () => {
   const router = useRouter();
@@ -37,7 +38,10 @@ const UsersPage = () => {
 
   const toggleMutation = useMutation({
     mutationFn: (id) => api.post(`/users/${id}/toggle-block`),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["users"] }),
+    onSuccess: (response) => {
+      queryClient.invalidateQueries({ queryKey: ["users"] });
+      toast.success(response.data.message);
+    },
     onError: (error) =>
       toast.error(error.response?.data?.message || error.message),
   });
@@ -197,6 +201,9 @@ const UsersPage = () => {
                 <thead className="bg-gray-50">
                   <tr>
                     <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      ID
+                    </th>
+                    <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Name
                     </th>
                     <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -205,20 +212,16 @@ const UsersPage = () => {
                     <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Referrer
                     </th>
-                    <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-4 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Tokens
                     </th>
-                    <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-4 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
                       USDT
                     </th>
-                    <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-4 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Account Status
                     </th>
-                    <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      User Status
-                    </th>
-
-                    <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-4 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Joining Date
                     </th>
                     <th className="px-6 py-4 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -231,8 +234,11 @@ const UsersPage = () => {
                   {data?.users && data.users.length > 0 ? (
                     data.users.map((user) => (
                       <tr key={user.id}>
-                        <td className="px-4 py-4 whitespace-nowrap">
-                          <span className="text-sm font-medium text-gray-900">
+                        <td className="px-4 py-4 text-center font-semibold whitespace-nowrap text-sm text-gray-900">
+                          {user.id}
+                        </td>
+                        <td className="px-6 py-4">
+                          <span className="text-sm text-center font-semibold text-gray-900">
                             {user.name}
                           </span>
                         </td>
@@ -242,13 +248,13 @@ const UsersPage = () => {
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                           {user.referrer?.name || "N/A"}
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-center">
                           {user.token}
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 text-center">
                           {formatCurrency(parseFloat(user.usdt))}
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-center">
                           <span
                             className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium ${
                               user.isActive
@@ -259,34 +265,11 @@ const UsersPage = () => {
                             {user.isActive ? "Active" : "Inactive"}
                           </span>
                         </td>
-                        <td
-                          className="px-6 py-4 whitespace-nowrap text-sm text-gray-900"
-                          onClick={() => {
-                            let message;
-                            if (user.isBlocked) {
-                              message = "Unblock User?";
-                            } else {
-                              message = "Block User?";
-                            }
-                            if (confirm(message)) {
-                              toggleMutation.mutate(user.id);
-                            }
-                          }}
-                        >
-                          <span
-                            className={`inline-flex cursor-pointer items-center px-2.5 py-1 rounded-full text-xs font-medium ${
-                              !user.isBlocked
-                                ? "bg-green-100 text-green-800"
-                                : "bg-red-100 text-red-800"
-                            }`}
-                          >
-                            {!user.isBlocked ? "Active" : "Blocked"}
-                          </span>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-center">
                           {formatDate(user.createdAt)}
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-right">
+                        <td className="px-6 py-4 whitespace-nowrap text-right flex gap-2 justify-end">
+                          {/* View Button */}
                           <Button
                             variant="outline"
                             className="hover:bg-gray-100 font-semibold"
@@ -299,6 +282,40 @@ const UsersPage = () => {
                           >
                             View
                           </Button>
+
+                          {/* Block/Unblock Icon Button */}
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="p-2 hover:opacity-80"
+                            onClick={async () => {
+                              const result = await Swal.fire({
+                                title: user.isBlocked
+                                  ? "Unblock User?"
+                                  : "Block User?",
+                                icon: "warning",
+                                showCancelButton: true,
+                                confirmButtonText: user.isBlocked
+                                  ? "Yes, Unblock"
+                                  : "Yes, Block",
+                                cancelButtonText: "Cancel",
+                                reverseButtons: true,
+                              });
+
+                              if (result.isConfirmed) {
+                                toggleMutation.mutate(user.id);
+                              }
+                            }}
+                            icon={
+                              <Ban
+                                className={`w-4 h-4 ${
+                                  user.isBlocked
+                                    ? "text-red-600"
+                                    : "text-gray-500"
+                                }`}
+                              />
+                            }
+                          />
                         </td>
                       </tr>
                     ))

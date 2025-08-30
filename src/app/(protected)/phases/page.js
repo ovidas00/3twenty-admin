@@ -3,11 +3,12 @@
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import api from "@/lib/api";
-import { Edit, Plus, Layers } from "lucide-react";
+import { Edit, Plus, Layers, CheckCircle } from "lucide-react";
 import Button from "@/components/ui/Button";
 import AddModal from "@/components/phases/AddModal";
 import UpdateModal from "@/components/phases/UpdateModal";
 import toast from "react-hot-toast";
+import Swal from "sweetalert2";
 
 const PhasesPage = () => {
   const queryClient = useQueryClient();
@@ -97,10 +98,10 @@ const PhasesPage = () => {
                     <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       End Date
                     </th>
-                    <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-4 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Supply
                     </th>
-                    <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-4 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Price
                     </th>
                     <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -119,12 +120,8 @@ const PhasesPage = () => {
                   {data && data.length > 0 ? (
                     data.map((phase) => (
                       <tr key={phase.id}>
-                        <td className="px-4 py-4 whitespace-nowrap">
-                          <div className="flex items-center">
-                            <span className="text-sm font-medium text-gray-900">
-                              {phase.name}
-                            </span>
-                          </div>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-semibold">
+                          {phase.name}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                           {formatDate(phase.start)}
@@ -132,26 +129,15 @@ const PhasesPage = () => {
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                           {formatDate(phase.end)}
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-right">
                           {phase.supply.toLocaleString()}
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 text-right">
                           {formatCurrency(phase.price)}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                           <span
-                            onClick={() => {
-                              if (!phase.isActive) {
-                                if (
-                                  confirm(
-                                    "Activate this phase? This will update token price and supply."
-                                  )
-                                ) {
-                                  activeMutation.mutate(phase.id);
-                                }
-                              }
-                            }}
-                            className={`cursor-pointer inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium ${
+                            className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium ${
                               phase.isActive
                                 ? "bg-green-100 text-green-800"
                                 : "bg-red-100 text-red-800"
@@ -160,12 +146,11 @@ const PhasesPage = () => {
                             {phase.isActive ? "Active" : "Inactive"}
                           </span>
                         </td>
-
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                           {formatDate(phase.updatedAt)}
                         </td>
-
-                        <td className="px-6 py-4 whitespace-nowrap text-right">
+                        <td className="px-6 py-4 whitespace-nowrap text-right flex gap-3 justify-end">
+                          {/* Edit Button */}
                           <Button
                             variant="outline"
                             className="hover:bg-gray-100 font-semibold"
@@ -178,6 +163,28 @@ const PhasesPage = () => {
                           >
                             Edit
                           </Button>
+
+                          {/* Activate Button */}
+                          <Button
+                            variant={phase.isActive ? "secondary" : "outline"}
+                            size="sm"
+                            icon={<CheckCircle className="w-4 h-4 me-0" />}
+                            disabled={phase.isActive}
+                            onClick={async () => {
+                              if (phase.isActive) return;
+                              const result = await Swal.fire({
+                                title: "Activate Phase?",
+                                text: "This will update token price and supply.",
+                                icon: "warning",
+                                showCancelButton: true,
+                                confirmButtonText: "Yes, activate it!",
+                                cancelButtonText: "Cancel",
+                              });
+                              if (result.isConfirmed) {
+                                activeMutation.mutate(phase.id);
+                              }
+                            }}
+                          ></Button>
                         </td>
                       </tr>
                     ))

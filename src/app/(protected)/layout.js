@@ -144,7 +144,7 @@ const Layout = ({ children }) => {
                         href={child.href}
                         className={`block px-3 py-2 text-gray-300 hover:bg-gray-700 hover:text-white rounded-lg text-sm ${
                           pathname === child.href
-                            ? "bg-gray-800 text-blue-500"
+                            ? "bg-gray-700 text-blue-500"
                             : ""
                         }`}
                       >
@@ -162,7 +162,7 @@ const Layout = ({ children }) => {
                 href={item.href}
                 className={`group flex items-center px-3 py-2 text-md font-medium rounded-lg transition-colors ${
                   isActive
-                    ? "bg-gray-800 text-blue-500"
+                    ? "bg-gray-700 text-blue-500"
                     : "text-gray-300 hover:bg-gray-700 hover:text-white"
                 }`}
               >
