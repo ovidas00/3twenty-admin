@@ -238,7 +238,7 @@ const UsersPage = () => {
                           {user.id}
                         </td>
                         <td className="px-6 py-4">
-                          <span className="text-sm text-center font-semibold text-gray-900">
+                          <span className="text-sm text-center whitespace-nowrap font-semibold text-gray-900">
                             {user.name}
                           </span>
                         </td>
