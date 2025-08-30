@@ -14,17 +14,17 @@ const FinanceOverview = () => {
   });
 
   const depositStats = {
-    total: finantialStats?.deposit?.total,
-    today: finantialStats?.deposit?.today,
-    last7Days: finantialStats?.deposit?.last7Days,
-    last30Days: finantialStats?.deposit?.last30Days,
+    total: finantialStats?.deposit?.total ?? 0,
+    today: finantialStats?.deposit?.today ?? 0,
+    last7Days: finantialStats?.deposit?.last7Days ?? 0,
+    last30Days: finantialStats?.deposit?.last30Days ?? 0,
   };
 
   const withdrawStats = {
-    total: finantialStats?.withdraw?.total,
-    today: finantialStats?.withdraw?.today,
-    last7Days: finantialStats?.withdraw?.last7Days,
-    last30Days: finantialStats?.withdraw?.last30Days,
+    total: finantialStats?.withdraw?.total ?? 0,
+    today: finantialStats?.withdraw?.today ?? 0,
+    last7Days: finantialStats?.withdraw?.last7Days ?? 0,
+    last30Days: finantialStats?.withdraw?.last30Days ?? 0,
   };
 
   const metricItem = (icon, label, value, iconColor) => (

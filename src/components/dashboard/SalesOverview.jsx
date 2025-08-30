@@ -32,8 +32,8 @@ const SalesDashboard = () => {
     runningSalesStats?.totalSupply - runningSalesStats?.total3TWENTY;
 
   const pieData = [
-    { name: "Total Supply", value: runningSalesStats?.totalSupply },
-    { name: "Sold 3Twenty", value: runningSalesStats?.total3TWENTY },
+    { name: "Total Supply", value: runningSalesStats?.totalSupply ?? 0 },
+    { name: "Sold 3Twenty", value: runningSalesStats?.total3TWENTY ?? 0 },
     { name: "Remaining", value: remainingSupply },
   ];
 
@@ -53,7 +53,7 @@ const SalesDashboard = () => {
                 Total Supply (3Twenty)
               </p>
               <p className="text-xl sm:text-2xl font-bold text-gray-900 mt-1">
-                {new Intl.NumberFormat().format(salesStats?.totalSupply)}
+                {new Intl.NumberFormat().format(salesStats?.totalSupply ?? 0)}
               </p>
             </div>
             <div className="bg-teal-50 rounded-xl p-4 flex flex-col items-start justify-center">
@@ -61,7 +61,7 @@ const SalesDashboard = () => {
                 Total Sold (3Twenty)
               </p>
               <p className="text-xl sm:text-2xl font-bold text-gray-900 mt-1">
-                {new Intl.NumberFormat().format(salesStats?.total3TWENTY)}
+                {new Intl.NumberFormat().format(salesStats?.total3TWENTY ?? 0)}
               </p>
             </div>
             <div className="bg-orange-50 rounded-xl p-4 flex flex-col items-start justify-center">
@@ -69,13 +69,13 @@ const SalesDashboard = () => {
                 Total Sold (USDT)
               </p>
               <p className="text-xl sm:text-2xl font-bold text-gray-900 mt-1">
-                ${new Intl.NumberFormat().format(salesStats?.totalUSDT)}
+                ${new Intl.NumberFormat().format(salesStats?.totalUSDT ?? 0)}
               </p>
             </div>
             <div className="bg-pink-50 rounded-xl p-4 flex flex-col items-start justify-center">
               <p className="text-sm font-medium text-gray-500">Sales Growth</p>
               <p className="text-xl sm:text-2xl font-bold text-gray-900 mt-1">
-                {salesStats?.salesGrowth}%
+                {salesStats?.salesGrowth ?? 0}%
               </p>
             </div>
           </div>
@@ -123,7 +123,7 @@ const SalesDashboard = () => {
                   Sales Growth
                 </p>
                 <p className="text-xl sm:text-2xl font-bold text-gray-900 mt-1">
-                  {runningSalesStats?.salesGrowth}%
+                  {runningSalesStats?.salesGrowth ?? 0}%
                 </p>
               </div>
               <div className="bg-orange-50 rounded-xl p-4 flex flex-col items-start justify-center">
@@ -132,7 +132,9 @@ const SalesDashboard = () => {
                 </p>
                 <p className="text-xl sm:text-2xl font-bold text-gray-900 mt-1">
                   $
-                  {new Intl.NumberFormat().format(runningSalesStats?.totalUSDT)}
+                  {new Intl.NumberFormat().format(
+                    runningSalesStats?.totalUSDT ?? 0
+                  )}
                 </p>
               </div>
             </div>
