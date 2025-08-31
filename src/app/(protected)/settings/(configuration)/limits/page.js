@@ -83,10 +83,11 @@ const LimitsPage = () => {
             onChange={(e) =>
               setFormData((prev) => ({
                 ...prev,
-                [field]: parseFloat(e.target.value) || 0,
+                [field]: e.target.value,
               }))
             }
             size="sm"
+            required={true}
           />
         ))}
 

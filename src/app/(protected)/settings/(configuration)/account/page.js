@@ -53,9 +53,10 @@ const ActivationPage = () => {
           label="Activation USDT (USDT)"
           icon={() => <span className="text-gray-500">$</span>}
           value={activationUSDT}
-          onChange={(e) => setActivationUSDT(parseFloat(e.target.value) || 0)}
+          onChange={(e) => setActivationUSDT(e.target.value)}
           placeholder="0.00"
           size="sm"
+          required={true}
         />
         <Button
           type="submit"

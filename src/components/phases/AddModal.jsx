@@ -16,6 +16,7 @@ const AddModal = ({ isOpen, onClose }) => {
     end: "",
     supply: "",
     price: "",
+    description: "",
   });
 
   const addMutation = useMutation({
@@ -28,6 +29,7 @@ const AddModal = ({ isOpen, onClose }) => {
         end: "",
         supply: "",
         price: "",
+        description: "",
       });
       onClose();
       queryClient.invalidateQueries({ queryKey: ["phases"] });
@@ -58,6 +60,18 @@ const AddModal = ({ isOpen, onClose }) => {
           required
           placeholder="Enter phase name"
           value={formData.name}
+          onChange={handleChange}
+        />
+
+        {/* Description */}
+        <Input
+          id="description"
+          name="description"
+          type="text"
+          label="Description"
+          maxLength={100}
+          placeholder="Enter a short description"
+          value={formData.description}
           onChange={handleChange}
         />
 

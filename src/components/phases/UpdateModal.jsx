@@ -16,6 +16,7 @@ const UpdateModal = ({ isOpen, onClose, selectedPhase }) => {
     end: "",
     supply: "",
     price: "",
+    description: "",
   });
 
   // preload selectedPhase data
@@ -27,6 +28,7 @@ const UpdateModal = ({ isOpen, onClose, selectedPhase }) => {
         end: selectedPhase.end?.slice(0, 10) || "",
         supply: selectedPhase.supply || "",
         price: selectedPhase.price || "",
+        description: selectedPhase.description || "",
       });
     }
   }, [selectedPhase]);
@@ -81,6 +83,18 @@ const UpdateModal = ({ isOpen, onClose, selectedPhase }) => {
           required
           placeholder="Enter phase name"
           value={formData.name}
+          onChange={handleChange}
+        />
+
+        {/* Description */}
+        <Input
+          id="description"
+          name="description"
+          type="text"
+          label="Description"
+          maxLength={100}
+          placeholder="Enter a short description"
+          value={formData.description}
           onChange={handleChange}
         />
 

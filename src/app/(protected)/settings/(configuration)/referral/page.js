@@ -82,11 +82,12 @@ const ReferralPage = () => {
             onChange={(e) =>
               setFormData((prev) => ({
                 ...prev,
-                [level]: e.target.value === "" ? 0 : parseFloat(e.target.value),
+                [level]: e.target.value,
               }))
             }
             size="sm"
             label={`Level ${level} (%)`}
+            required={true}
           />
         ))}
 

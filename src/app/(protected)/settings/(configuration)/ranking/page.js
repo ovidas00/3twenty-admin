@@ -70,10 +70,11 @@ const RankingPage = () => {
             onChange={(e) =>
               setFormData((prev) => ({
                 ...prev,
-                [rank]: parseFloat(e.target.value) || 0,
+                [rank]: e.target.value,
               }))
             }
             size="sm"
+            required={true}
           />
         ))}
 

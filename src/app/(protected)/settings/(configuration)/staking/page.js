@@ -75,11 +75,10 @@ const StakingPage = () => {
           type="number"
           min="1"
           value={stakingDetails.durationDays}
-          onChange={(e) =>
-            handleChange("durationDays", parseInt(e.target.value) || 0)
-          }
+          onChange={(e) => handleChange("durationDays", e.target.value)}
           size="sm"
           label="Duration Days"
+          required={true}
         />
         {/* APY */}
         <Input
@@ -87,9 +86,10 @@ const StakingPage = () => {
           step="0.01"
           min="0"
           value={stakingDetails.apy}
-          onChange={(e) => handleChange("apy", parseFloat(e.target.value) || 0)}
+          onChange={(e) => handleChange("apy", e.target.value)}
           size="sm"
           label="APY (%)"
+          required={true}
         />
         {/* Minimum Stake */}
         <Input
@@ -97,11 +97,10 @@ const StakingPage = () => {
           step="0.01"
           min="0"
           value={stakingDetails.minimum}
-          onChange={(e) =>
-            handleChange("minimum", parseFloat(e.target.value) || 0)
-          }
+          onChange={(e) => handleChange("minimum", e.target.value)}
           size="sm"
           label="Minimum Stake"
+          required={true}
         />
         {/* Maximum Stake */}
         <Input
@@ -109,11 +108,10 @@ const StakingPage = () => {
           step="0.01"
           min="0"
           value={stakingDetails.maximum}
-          onChange={(e) =>
-            handleChange("maximum", parseFloat(e.target.value) || 0)
-          }
+          onChange={(e) => handleChange("maximum", e.target.value)}
           size="sm"
           label="Maximun Stake"
+          required={true}
         />
         {/* Update Button */}
         <div className="col-span-full flex justify-start mt-4">
