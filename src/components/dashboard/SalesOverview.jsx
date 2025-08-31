@@ -28,16 +28,13 @@ const SalesDashboard = () => {
     },
   });
 
-  const remainingSupply =
-    runningSalesStats?.totalSupply - runningSalesStats?.total3TWENTY;
-
+  // Pie only shows Sold vs Remaining
   const pieData = [
-    { name: "Total Supply", value: runningSalesStats?.totalSupply ?? 0 },
     { name: "Sold 3Twenty", value: runningSalesStats?.total3TWENTY ?? 0 },
-    { name: "Remaining", value: remainingSupply },
+    { name: "Remaining", value: runningSalesStats?.totalAvailable ?? 0 },
   ];
 
-  const COLORS = ["#E5E7EB", "#10B981", "#3B82F6"]; // gray for total, green sold, blue remaining
+  const COLORS = ["#10B981", "#3B82F6"]; // green sold, blue remaining
 
   return (
     <div className="max-w-7xl mx-auto space-y-6">
@@ -117,7 +114,17 @@ const SalesDashboard = () => {
             </div>
 
             {/* Metrics */}
-            <div className="flex-1 grid grid-cols-2 lg:grid-cols-1 gap-6 w-full">
+            <div className="flex-1 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-1 gap-6 w-full">
+              <div className="bg-indigo-50 rounded-xl p-4 flex flex-col items-start justify-center">
+                <p className="text-sm font-medium text-gray-500">
+                  Total Supply (3Twenty)
+                </p>
+                <p className="text-xl sm:text-2xl font-bold text-gray-900 mt-1">
+                  {new Intl.NumberFormat().format(
+                    runningSalesStats?.totalSupply ?? 0
+                  )}
+                </p>
+              </div>
               <div className="bg-green-50 rounded-xl p-4 flex flex-col items-start justify-center">
                 <p className="text-sm font-medium text-gray-500">
                   Sales Growth
