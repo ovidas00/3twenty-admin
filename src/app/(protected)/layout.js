@@ -145,7 +145,7 @@ const Layout = ({ children }) => {
                         <a
                           key={child.name}
                           href={child.href}
-                          className={`block px-3 py-2 rounded-md text-sm relative ${
+                          className={`block px-3 py-2 rounded-md font-medium relative ${
                             pathname === child.href
                               ? "bg-blue-900/50 text-blue-300 font-medium border-l-2 border-blue-500"
                               : "text-gray-400 hover:bg-gray-700 hover:text-gray-200"
@@ -164,7 +164,7 @@ const Layout = ({ children }) => {
               <a
                 key={item.name}
                 href={item.href}
-                className={`group flex items-center px-3 py-2.5 text-sm font-medium rounded-md ${
+                className={`group flex items-center px-3 py-2.5 font-medium rounded-md ${
                   isActive
                     ? "bg-blue-900/50 text-blue-300 border-l-2 border-blue-500"
                     : "text-gray-300 hover:bg-gray-700 hover:text-white"
@@ -190,10 +190,10 @@ const Layout = ({ children }) => {
               <User className="h-4 w-4 text-gray-300" />
             </div>
             <div className="min-w-0 flex-1">
-              <p className="text-sm font-medium text-gray-200 truncate">
+              <p className="text-md font-medium text-gray-200 truncate">
                 {user?.name}
               </p>
-              <p className="text-xs text-gray-400">Administrator</p>
+              <p className="text-sm text-gray-400">Administrator</p>
             </div>
           </div>
           <button
