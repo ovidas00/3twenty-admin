@@ -221,10 +221,13 @@ const Layout = ({ children }) => {
           <div className="flex items-center">
             <button
               onClick={() => setSidebarOpen(true)}
-              className="lg:hidden p-2 rounded-md text-gray-300 hover:text-gray-100 hover:bg-gray-700 cursor-pointer"
+              className="lg:hidden p-2 rounded-md text-gray-300 lg:text-gray-600 hover:text-gray-100 lg:hover:text-gray-900 hover:bg-gray-700 lg:hover:bg-gray-100 cursor-pointer"
             >
               <Menu className="h-5 w-5" />
             </button>
+            <h1 className="ml-4 text-xl md:hidden font-semibold text-white lg:text-gray-900">
+              Dashboard
+            </h1>
           </div>
         </header>
 
