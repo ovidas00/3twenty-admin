@@ -217,7 +217,7 @@ const Layout = ({ children }) => {
       {/* Main area */}
       <div className="flex-1 flex flex-col overflow-hidden">
         {/* Header */}
-        <header className="flex-shrink-0 h-16 bg-gray-800 lg:bg-white border-b border-gray-700 lg:border-gray-200 flex items-center justify-between px-4 sm:px-6 lg:px-8">
+        <header className="flex-shrink-0 h-18 bg-gray-800 lg:bg-white border-b border-gray-700 lg:border-gray-200 flex items-center justify-between px-4 sm:px-6 lg:px-8">
           <div className="flex items-center">
             <button
               onClick={() => setSidebarOpen(true)}
