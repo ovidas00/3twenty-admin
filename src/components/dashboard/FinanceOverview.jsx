@@ -5,7 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import { ArrowUp, ArrowDown, Calendar, Clock } from "lucide-react";
 
 const FinanceOverview = () => {
-  const { data: finantialStats } = useQuery({
+  const { data: finantialStats, isLoading } = useQuery({
     queryKey: ["finantialstats"],
     queryFn: async () => {
       const response = await api.get("/dashboard/finantial-stats");
@@ -27,14 +27,22 @@ const FinanceOverview = () => {
     last30Days: finantialStats?.withdraw?.last30Days ?? 0,
   };
 
-  const metricItem = (icon, label, value, iconColor) => (
-    <div className="flex justify-between items-center py-3">
+  const metricItem = (icon, label, value, iconColor, isLoading) => (
+    <div className="flex justify-between items-center py-4">
       <div className="flex items-center gap-3">
-        <div className={`p-2 rounded-full ${iconColor} text-white`}>{icon}</div>
-        <p className="text-gray-700 font-medium">{label}</p>
+        <div
+          className={`p-2 rounded-lg ${iconColor} flex items-center justify-center`}
+        >
+          {icon}
+        </div>
+        <p className="text-sm font-medium text-gray-600">{label}</p>
       </div>
-      <p className="font-semibold text-gray-900">
-        ${new Intl.NumberFormat().format(value)}
+      <p className="font-semibold text-gray-900 text-lg">
+        {isLoading ? (
+          <span className="inline-block h-6 w-20 bg-gray-200 rounded animate-pulse"></span>
+        ) : (
+          `$${new Intl.NumberFormat().format(value)}`
+        )}
       </p>
     </div>
   );
@@ -42,40 +50,57 @@ const FinanceOverview = () => {
   const statsCard = (title, stats, type) => {
     const arrowIcon =
       type === "Deposit" ? (
-        <ArrowDown className="w-5 h-5" />
+        <ArrowDown className="w-4 h-4 text-white" />
       ) : (
-        <ArrowUp className="w-5 h-5" />
+        <ArrowUp className="w-4 h-4 text-white" />
       );
     const arrowColor = type === "Deposit" ? "bg-green-500" : "bg-red-500";
 
     return (
-      <div className="bg-white rounded-xl shadow duration-200 p-6 divide-y divide-gray-100">
-        <h2 className="text-2xl font-bold text-gray-700 mb-4">{title}</h2>
-        {metricItem(arrowIcon, `${type} Total`, stats.total, arrowColor)}
-        {metricItem(
-          <Clock className="w-5 h-5" />,
-          "Today",
-          stats.today,
-          "bg-blue-500"
-        )}
-        {metricItem(
-          <Calendar className="w-5 h-5" />,
-          "Last 7 Days",
-          stats.last7Days,
-          "bg-yellow-500"
-        )}
-        {metricItem(
-          <Calendar className="w-5 h-5" />,
-          "Last 30 Days",
-          stats.last30Days,
-          "bg-pink-500"
-        )}
+      <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 transition-all duration-200 hover:shadow-md">
+        <div className="mb-6">
+          <h2 className="text-xl font-semibold text-gray-800">{title}</h2>
+          <p className="text-sm text-gray-500 mt-1">
+            Financial transaction overview
+          </p>
+        </div>
+
+        <div className="divide-y divide-gray-100">
+          {metricItem(
+            <div className={`p-1 rounded-full ${arrowColor}`}>{arrowIcon}</div>,
+            `${type} Total`,
+            stats.total,
+            "bg-gray-100",
+            isLoading
+          )}
+          {metricItem(
+            <Clock className="w-4 h-4 text-blue-600" />,
+            "Today",
+            stats.today,
+            "bg-blue-50",
+            isLoading
+          )}
+          {metricItem(
+            <Calendar className="w-4 h-4 text-yellow-600" />,
+            "Last 7 Days",
+            stats.last7Days,
+            "bg-yellow-50",
+            isLoading
+          )}
+          {metricItem(
+            <Calendar className="w-4 h-4 text-purple-600" />,
+            "Last 30 Days",
+            stats.last30Days,
+            "bg-purple-50",
+            isLoading
+          )}
+        </div>
       </div>
     );
   };
 
   return (
-    <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
       {statsCard("Deposit Overview", depositStats, "Deposit")}
       {statsCard("Withdraw Overview", withdrawStats, "Withdraw")}
     </div>

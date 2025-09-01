@@ -12,7 +12,7 @@ import {
 } from "recharts";
 
 const SalesDashboard = () => {
-  const { data: salesStats } = useQuery({
+  const { data: salesStats, isLoading: salesLoading } = useQuery({
     queryKey: ["salesstate"],
     queryFn: async () => {
       const response = await api.get("/dashboard/sale-stats");
@@ -20,7 +20,7 @@ const SalesDashboard = () => {
     },
   });
 
-  const { data: runningSalesStats } = useQuery({
+  const { data: runningSalesStats, isLoading: runningSalesLoading } = useQuery({
     queryKey: ["runningsalestate"],
     queryFn: async () => {
       const response = await api.get("/dashboard/running-sale-stats");
@@ -40,47 +40,67 @@ const SalesDashboard = () => {
     <div className="max-w-7xl mx-auto space-y-6">
       <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.3fr] gap-6">
         {/* Sales Overview */}
-        <div className="bg-white rounded-xl shadow p-6">
-          <h2 className="text-2xl font-bold text-gray-700 mb-6">
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+          <h2 className="text-xl font-semibold text-gray-800 mb-6">
             Sales Overview
           </h2>
-          <div className="grid grid-cols-2 sm:grid-cols-2 gap-6">
-            <div className="bg-indigo-50 rounded-xl p-4 flex flex-col items-start justify-center">
-              <p className="text-sm font-medium text-gray-500">
+          <div className="grid grid-cols-2 gap-4">
+            <div className="bg-blue-50 rounded-lg p-4 border-l-4 border-blue-500">
+              <p className="text-sm font-medium text-gray-600 mb-1">
                 Total Supply (3Twenty)
               </p>
-              <p className="text-xl sm:text-2xl font-bold text-gray-900 mt-1">
-                {new Intl.NumberFormat().format(salesStats?.totalSupply ?? 0)}
+              <p className="text-xl font-bold text-gray-900">
+                {salesLoading ? (
+                  <span className="inline-block h-7 w-20 bg-gray-200 rounded animate-pulse"></span>
+                ) : (
+                  new Intl.NumberFormat().format(salesStats?.totalSupply ?? 0)
+                )}
               </p>
             </div>
-            <div className="bg-teal-50 rounded-xl p-4 flex flex-col items-start justify-center">
-              <p className="text-sm font-medium text-gray-500">
+            <div className="bg-green-50 rounded-lg p-4 border-l-4 border-green-500">
+              <p className="text-sm font-medium text-gray-600 mb-1">
                 Total Sold (3Twenty)
               </p>
-              <p className="text-xl sm:text-2xl font-bold text-gray-900 mt-1">
-                {new Intl.NumberFormat().format(salesStats?.total3TWENTY ?? 0)}
+              <p className="text-xl font-bold text-gray-900">
+                {salesLoading ? (
+                  <span className="inline-block h-7 w-20 bg-gray-200 rounded animate-pulse"></span>
+                ) : (
+                  new Intl.NumberFormat().format(salesStats?.total3TWENTY ?? 0)
+                )}
               </p>
             </div>
-            <div className="bg-orange-50 rounded-xl p-4 flex flex-col items-start justify-center">
-              <p className="text-sm font-medium text-gray-500">
+            <div className="bg-orange-50 rounded-lg p-4 border-l-4 border-orange-500">
+              <p className="text-sm font-medium text-gray-600 mb-1">
                 Total Sold (USDT)
               </p>
-              <p className="text-xl sm:text-2xl font-bold text-gray-900 mt-1">
-                ${new Intl.NumberFormat().format(salesStats?.totalUSDT ?? 0)}
+              <p className="text-xl font-bold text-gray-900">
+                {salesLoading ? (
+                  <span className="inline-block h-7 w-20 bg-gray-200 rounded animate-pulse"></span>
+                ) : (
+                  `$${new Intl.NumberFormat().format(
+                    salesStats?.totalUSDT ?? 0
+                  )}`
+                )}
               </p>
             </div>
-            <div className="bg-pink-50 rounded-xl p-4 flex flex-col items-start justify-center">
-              <p className="text-sm font-medium text-gray-500">Sales Growth</p>
-              <p className="text-xl sm:text-2xl font-bold text-gray-900 mt-1">
-                {salesStats?.salesGrowth ?? 0}%
+            <div className="bg-purple-50 rounded-lg p-4 border-l-4 border-purple-500">
+              <p className="text-sm font-medium text-gray-600 mb-1">
+                Sales Growth
+              </p>
+              <p className="text-xl font-bold text-gray-900">
+                {salesLoading ? (
+                  <span className="inline-block h-7 w-12 bg-gray-200 rounded animate-pulse"></span>
+                ) : (
+                  `${salesStats?.salesGrowth ?? 0}%`
+                )}
               </p>
             </div>
           </div>
         </div>
 
         {/* Active Phase Overview */}
-        <div className="bg-white rounded-xl shadow p-6">
-          <h2 className="text-2xl font-bold text-gray-700 mb-6">
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+          <h2 className="text-xl font-semibold text-gray-800 mb-6">
             Active Phase Overview
           </h2>
 
@@ -95,52 +115,77 @@ const SalesDashboard = () => {
                     nameKey="name"
                     cx="50%"
                     cy="50%"
-                    innerRadius={50}
+                    innerRadius={60}
                     outerRadius={80}
-                    paddingAngle={3}
-                    label
+                    paddingAngle={2}
+                    label={({ name, percent }) =>
+                      `${name}: ${(percent * 100).toFixed(0)}%`
+                    }
+                    labelLine={false}
                   >
                     {pieData.map((entry, index) => (
                       <Cell
                         key={`cell-${index}`}
                         fill={COLORS[index % COLORS.length]}
+                        stroke="#fff"
+                        strokeWidth={2}
                       />
                     ))}
                   </Pie>
-                  <Tooltip />
-                  <Legend verticalAlign="bottom" height={36} />
+                  <Tooltip
+                    formatter={(value) =>
+                      new Intl.NumberFormat().format(Number(value))
+                    }
+                  />
+                  <Legend
+                    verticalAlign="bottom"
+                    height={36}
+                    iconType="circle"
+                    iconSize={10}
+                  />
                 </PieChart>
               </ResponsiveContainer>
             </div>
 
             {/* Metrics */}
-            <div className="flex-1 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-1 gap-6 w-full">
-              <div className="bg-indigo-50 rounded-xl p-4 flex flex-col items-start justify-center">
-                <p className="text-sm font-medium text-gray-500">
+            <div className="flex-1 grid grid-cols-1 gap-4 w-full">
+              <div className="bg-blue-50 rounded-lg p-4 border-l-4 border-blue-500">
+                <p className="text-sm font-medium text-gray-600 mb-1">
                   Total Supply (3Twenty)
                 </p>
-                <p className="text-xl sm:text-2xl font-bold text-gray-900 mt-1">
-                  {new Intl.NumberFormat().format(
-                    runningSalesStats?.totalSupply ?? 0
+                <p className="text-xl font-bold text-gray-900">
+                  {runningSalesLoading ? (
+                    <span className="inline-block h-7 w-20 bg-gray-200 rounded animate-pulse"></span>
+                  ) : (
+                    new Intl.NumberFormat().format(
+                      runningSalesStats?.totalSupply ?? 0
+                    )
                   )}
                 </p>
               </div>
-              <div className="bg-green-50 rounded-xl p-4 flex flex-col items-start justify-center">
-                <p className="text-sm font-medium text-gray-500">
+              <div className="bg-green-50 rounded-lg p-4 border-l-4 border-green-500">
+                <p className="text-sm font-medium text-gray-600 mb-1">
                   Sales Growth
                 </p>
-                <p className="text-xl sm:text-2xl font-bold text-gray-900 mt-1">
-                  {runningSalesStats?.salesGrowth ?? 0}%
+                <p className="text-xl font-bold text-gray-900">
+                  {runningSalesLoading ? (
+                    <span className="inline-block h-7 w-12 bg-gray-200 rounded animate-pulse"></span>
+                  ) : (
+                    `${runningSalesStats?.salesGrowth ?? 0}%`
+                  )}
                 </p>
               </div>
-              <div className="bg-orange-50 rounded-xl p-4 flex flex-col items-start justify-center">
-                <p className="text-sm font-medium text-gray-500">
+              <div className="bg-orange-50 rounded-lg p-4 border-l-4 border-orange-500">
+                <p className="text-sm font-medium text-gray-600 mb-1">
                   Total Sold (USDT)
                 </p>
-                <p className="text-xl sm:text-2xl font-bold text-gray-900 mt-1">
-                  $
-                  {new Intl.NumberFormat().format(
-                    runningSalesStats?.totalUSDT ?? 0
+                <p className="text-xl font-bold text-gray-900">
+                  {runningSalesLoading ? (
+                    <span className="inline-block h-7 w-20 bg-gray-200 rounded animate-pulse"></span>
+                  ) : (
+                    `$${new Intl.NumberFormat().format(
+                      runningSalesStats?.totalUSDT ?? 0
+                    )}`
                   )}
                 </p>
               </div>
