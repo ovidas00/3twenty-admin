@@ -2,7 +2,7 @@ import React from "react";
 import { CheckCircle, XCircle, X } from "lucide-react";
 
 const Alert = ({ type, message, onClose, className = "" }) => {
-  const baseStyles = "p-2 rounded-lg border flex items-start gap-3";
+  const baseStyles = "p-2 rounded-lg border flex items-center gap-3";
 
   const typeStyles = {
     success: "bg-green-50 border-green-200 text-green-800",

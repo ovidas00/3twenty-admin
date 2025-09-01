@@ -99,7 +99,11 @@ const Button = ({
       disabled={disabled || isLoading}
       {...props}
     >
-      {isLoading && <LoadingSpinner />}
+      {isLoading && (
+        <span className="me-1.5">
+          <LoadingSpinner />
+        </span>
+      )}
 
       {icon && iconPosition === "left" && !isLoading && (
         <span
