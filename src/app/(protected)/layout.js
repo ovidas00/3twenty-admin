@@ -122,7 +122,7 @@ const Layout = ({ children }) => {
                 <div key={item.name} className="space-y-1">
                   <button
                     onClick={() => toggleSubmenu(item.name)}
-                    className="group flex items-center w-full px-3 py-2.5 text-sm font-medium rounded-md text-gray-300 hover:bg-gray-700 hover:text-white"
+                    className="group flex items-center w-full px-3 py-2.5 font-medium rounded-md text-gray-300 hover:bg-gray-700 hover:text-white"
                   >
                     <Icon className="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-200" />
                     <span className="flex-1 text-left">{item.name}</span>
