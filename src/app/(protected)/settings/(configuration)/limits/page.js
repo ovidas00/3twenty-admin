@@ -2,11 +2,20 @@
 
 import { useState, useEffect, useContext } from "react";
 import { useMutation } from "@tanstack/react-query";
-import api from "@/lib/api"; // adjust API import
+import api from "@/lib/api";
 import { ConfigContext } from "../layout";
 import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
 import Alert from "@/components/ui/Alert";
+import {
+  Settings,
+  DollarSign,
+  Save,
+  Download,
+  Upload,
+  Coins,
+  CreditCard,
+} from "lucide-react";
 
 const LimitsPage = () => {
   const { minimumDeposit, minimumWithdraw, minimumBuyToken, withdrawCharge } =
@@ -36,21 +45,36 @@ const LimitsPage = () => {
     onSuccess: (response) => {
       setMessage({
         type: "success",
-        text: response.data.message || "Deposit settings updated successfully",
+        text: response.data.message || "Settings updated successfully",
       });
     },
     onError: (error) => {
       setMessage({
         type: "error",
-        text: error.response?.data?.message || "Something went wrong",
+        text: error.response?.data?.message || "Failed to update settings",
       });
     },
   });
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setMessage(null); // reset message
+    setMessage(null);
     updateMutation.mutate();
+  };
+
+  const getFieldIcon = (field) => {
+    switch (field) {
+      case "minimumDeposit":
+        return <Download className="w-4 h-4 text-blue-600" />;
+      case "minimumWithdraw":
+        return <Upload className="w-4 h-4 text-green-600" />;
+      case "minimumBuyToken":
+        return <Coins className="w-4 h-4 text-yellow-600" />;
+      case "withdrawCharge":
+        return <CreditCard className="w-4 h-4 text-purple-600" />;
+      default:
+        return <DollarSign className="w-4 h-4 text-gray-400" />;
+    }
   };
 
   const formatLabel = (field) => {
@@ -60,50 +84,77 @@ const LimitsPage = () => {
   };
 
   return (
-    <div className="bg-white p-4 md:p-6  rounded-lg shadow-sm border border-gray-200">
-      <form
-        onSubmit={handleSubmit}
-        className="grid grid-cols-1 md:grid-cols-4 gap-4"
-      >
-        {message && (
-          <Alert
-            message={message.text}
-            type={message.type}
-            className="col-span-full"
-          />
-        )}
-
-        {Object.entries(formData).map(([field, value]) => (
-          <Input
-            key={field}
-            type="number"
-            step="0.01"
-            min="0"
-            label={formatLabel(field)}
-            icon={() => <span className="text-gray-500">$</span>}
-            value={value}
-            onChange={(e) =>
-              setFormData((prev) => ({
-                ...prev,
-                [field]: e.target.value,
-              }))
-            }
-            size="sm"
-            required={true}
-          />
-        ))}
-
-        <div className="col-span-full flex justify-start mt-2">
-          <Button
-            type="submit"
-            variant="primary"
-            size="md"
-            isLoading={updateMutation.isPending}
-          >
-            {updateMutation.isPending ? "Updating..." : "Update"}
-          </Button>
+    <div className="max-w-6xl mx-auto">
+      <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+        {/* Header */}
+        <div className="flex items-center gap-3 mb-8">
+          <div className="p-2 bg-blue-100 rounded-lg">
+            <Settings className="w-5 h-5 text-blue-600" />
+          </div>
+          <div>
+            <h2 className="text-xl font-semibold text-gray-800">
+              Financial Limits
+            </h2>
+            <p className="text-sm text-gray-500 mt-1">
+              Configure minimum amounts and fees for transactions
+            </p>
+          </div>
         </div>
-      </form>
+
+        <form onSubmit={handleSubmit} className="space-y-6">
+          {message && (
+            <Alert
+              message={message.text}
+              type={message.type}
+              className="col-span-full"
+            />
+          )}
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {Object.entries(formData).map(([field, value]) => (
+              <div key={field} className="space-y-3">
+                <Input
+                  type="number"
+                  label={formatLabel(field)}
+                  step="0.01"
+                  min="0.01"
+                  value={value}
+                  onChange={(e) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      [field]: e.target.value,
+                    }))
+                  }
+                  placeholder="0.00"
+                  size="sm"
+                  required={true}
+                  icon={() => (
+                    <span className="text-gray-400">
+                      {field === "withdrawCharge" ? "%" : "$"}
+                    </span>
+                  )}
+                  className="w-full"
+                />
+              </div>
+            ))}
+          </div>
+
+          <div className="flex items-center justify-between pt-6 border-t border-gray-200">
+            <Button
+              type="submit"
+              variant="dark"
+              size="md"
+              isLoading={updateMutation.isPending}
+              icon={
+                updateMutation.isPending ? null : <Save className="w-4 h-4" />
+              }
+              className="min-w-[120px]"
+            >
+              {updateMutation.isPending ? "Updating..." : "Save Changes"}
+            </Button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 };

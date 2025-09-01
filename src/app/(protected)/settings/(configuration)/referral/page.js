@@ -7,6 +7,7 @@ import { ConfigContext } from "../layout";
 import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
 import Alert from "@/components/ui/Alert";
+import { Settings, Users, Save, User } from "lucide-react";
 
 const ReferralPage = () => {
   const { PROFIT_MAP } = useContext(ConfigContext) || {};
@@ -40,13 +41,15 @@ const ReferralPage = () => {
         type: "success",
         text:
           response.data.message ||
-          "Referral profit settings updated successfully",
+          "Referral commission settings updated successfully",
       });
     },
     onError: (error) => {
       setMessage({
         type: "error",
-        text: error.response?.data?.message || "Something went wrong",
+        text:
+          error.response?.data?.message ||
+          "Failed to update commission settings",
       });
     },
   });
@@ -58,50 +61,74 @@ const ReferralPage = () => {
   };
 
   return (
-    <div className="bg-white p-4 md:p-6 rounded-lg shadow-sm border border-gray-200">
-      <form
-        onSubmit={handleSubmit}
-        className="grid grid-cols-1 md:grid-cols-3 gap-4"
-      >
-        {message && (
-          <Alert
-            message={message.text}
-            type={message.type}
-            className="col-span-full"
-          />
-        )}
-
-        {Object.entries(formData).map(([level, value]) => (
-          <Input
-            key={level}
-            type="number"
-            step="0.01"
-            min="0"
-            max="100"
-            value={value}
-            onChange={(e) =>
-              setFormData((prev) => ({
-                ...prev,
-                [level]: e.target.value,
-              }))
-            }
-            size="sm"
-            label={`Level ${level} (%)`}
-            required={true}
-          />
-        ))}
-
-        <div className="col-span-full flex justify-start mt-2">
-          <Button
-            type="submit"
-            variant="primary"
-            size="md"
-            isLoading={updateMutation.isPending}
-          >
-            {updateMutation.isPending ? "Updating..." : "Update"}
-          </Button>
+    <div className="max-w-6xl mx-auto">
+      <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+        {/* Header */}
+        <div className="flex items-center gap-3 mb-8">
+          <div className="p-2 bg-blue-100 rounded-lg">
+            <Settings className="w-5 h-5 text-blue-600" />
+          </div>
+          <div>
+            <h2 className="text-xl font-semibold text-gray-800">
+              Referral Commission
+            </h2>
+            <p className="text-sm text-gray-500 mt-1">
+              Configure commission percentages for different referral levels
+            </p>
+          </div>
         </div>
-      </form>
+
+        <form onSubmit={handleSubmit} className="space-y-6">
+          {message && (
+            <Alert
+              message={message.text}
+              type={message.type}
+              className="col-span-full"
+            />
+          )}
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {Object.entries(formData).map(([level, value]) => (
+              <div key={level} className="space-y-3">
+                <Input
+                  type="number"
+                  step="0.01"
+                  min="0"
+                  max="100"
+                  value={value}
+                  label={`Level ${level} (%)`}
+                  onChange={(e) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      [level]: e.target.value,
+                    }))
+                  }
+                  placeholder="0.00"
+                  size="sm"
+                  required={true}
+                  icon={() => <span className="text-gray-400">%</span>}
+                  className="w-full"
+                />
+              </div>
+            ))}
+          </div>
+
+          <div className="flex items-center justify-between pt-6 border-t border-gray-200">
+            <Button
+              type="submit"
+              variant="dark"
+              size="md"
+              isLoading={updateMutation.isPending}
+              icon={
+                updateMutation.isPending ? null : <Save className="w-4 h-4" />
+              }
+              className="min-w-[120px]"
+            >
+              {updateMutation.isPending ? "Updating..." : "Save Changes"}
+            </Button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 };

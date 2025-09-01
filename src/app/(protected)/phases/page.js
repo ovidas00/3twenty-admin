@@ -81,7 +81,7 @@ const PhasesPage = () => {
                 </p>
               </div>
               <Button
-                className="font-semibold"
+                className="font-semibold w-full md:w-auto"
                 variant="dark"
                 onClick={() => setIsAddModalOpen(true)}
                 icon={<Plus className="w-4 h-4" />}
