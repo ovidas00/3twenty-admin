@@ -28,7 +28,7 @@ const UsersPage = () => {
   const [appliedParams, setAppliedParams] = useState("");
 
   // fetch users with applied params
-  const { data, refetch } = useQuery({
+  const { data, refetch, isLoading } = useQuery({
     queryKey: ["users", appliedParams],
     queryFn: async () => {
       const response = await api.get(`/users?${appliedParams}`);
@@ -128,15 +128,20 @@ const UsersPage = () => {
       />
 
       <div className="p-4 md:p-6">
-        <div className="max-w-6xl mx-auto">
-          <div className="bg-white overflow-hidden rounded-lg shadow-sm border border-gray-200">
+        <div className="max-w-7xl mx-auto">
+          <div className="bg-white rounded-xl shadow-sm border border-gray-200">
             {/* Header with Filters */}
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 px-4 py-5 md:px-6 border-b border-gray-200">
-              <h2 className="text-xl md:text-2xl font-bold text-gray-900">
-                Users List
-              </h2>
+            <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 p-6 border-b border-gray-200">
+              <div>
+                <h2 className="text-xl font-semibold text-gray-800">
+                  Users Management
+                </h2>
+                <p className="text-sm text-gray-500 mt-1">
+                  Manage and monitor user accounts
+                </p>
+              </div>
 
-              <div className="flex flex-col md:flex-row gap-3 md:gap-4 w-full md:w-auto items-stretch md:items-center">
+              <div className="flex flex-col sm:flex-row gap-3 w-full lg:w-auto">
                 <Input
                   id="search"
                   name="search"
@@ -145,49 +150,57 @@ const UsersPage = () => {
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   placeholder="Search by email"
-                  className="w-full md:w-64"
+                  className="w-full sm:w-64"
                   size="sm"
                 />
 
-                <Select
-                  id="status"
-                  name="status"
-                  value={statusFilter}
-                  onChange={(e) => setStatusFilter(e.target.value)}
-                  options={[
-                    { value: "all", label: "All Accounts" },
-                    { value: "active", label: "Active" },
-                    { value: "inactive", label: "Inactive" },
-                  ]}
-                  size="sm"
-                />
+                <div className="flex flex-row gap-2">
+                  <div className="flex-1">
+                    <Select
+                      id="status"
+                      name="status"
+                      value={statusFilter}
+                      onChange={(e) => setStatusFilter(e.target.value)}
+                      options={[
+                        { value: "all", label: "All Accounts" },
+                        { value: "active", label: "Active" },
+                        { value: "inactive", label: "Inactive" },
+                      ]}
+                      size="sm"
+                    />
+                  </div>
 
-                <Select
-                  id="userStatus"
-                  name="userStatus"
-                  value={userStatus}
-                  onChange={(e) => setUserStatus(e.target.value)}
-                  options={[
-                    { value: "all", label: "All Users" },
-                    { value: "active", label: "Active" },
-                    { value: "blocked", label: "Blocked" },
-                  ]}
-                  size="sm"
-                />
+                  <div className="flex-1">
+                    <Select
+                      id="userStatus"
+                      name="userStatus"
+                      value={userStatus}
+                      onChange={(e) => setUserStatus(e.target.value)}
+                      options={[
+                        { value: "all", label: "All Users" },
+                        { value: "active", label: "Active" },
+                        { value: "blocked", label: "Blocked" },
+                      ]}
+                      size="sm"
+                    />
+                  </div>
+                </div>
 
-                <div className="flex flex-row gap-2 w-full md:w-auto">
+                <div className="flex flex-row gap-2">
                   <Button
                     onClick={handleSearch}
                     variant="dark"
-                    className="flex-1 md:flex-none"
+                    className="flex-1"
                     icon={<Filter className="w-4 h-4" />}
+                    size="sm"
                   >
                     Apply
                   </Button>
                   <Button
                     onClick={handleReset}
                     variant="outline"
-                    className="flex-1 md:flex-none"
+                    className="flex-1"
+                    size="sm"
                   >
                     Reset
                   </Button>
@@ -219,11 +232,11 @@ const UsersPage = () => {
                       USDT
                     </th>
                     <th className="px-6 py-4 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Account Status
+                      Status
                     </th>
-                    <th className="px-6 py-4 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Joining Date
-                    </th>
+                    {/* <th className="px-6 py-4 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Joined
+                    </th> */}
                     <th className="px-6 py-4 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Actions
                     </th>
@@ -231,32 +244,46 @@ const UsersPage = () => {
                 </thead>
 
                 <tbody className="divide-y divide-gray-200">
-                  {data?.users && data.users.length > 0 ? (
+                  {isLoading ? (
+                    // Loading skeleton
+                    Array.from({ length: 5 }).map((_, index) => (
+                      <tr key={index}>
+                        {Array.from({ length: 9 }).map((_, cellIndex) => (
+                          <td key={cellIndex} className="px-6 py-4">
+                            <div className="h-4 bg-gray-200 rounded animate-pulse"></div>
+                          </td>
+                        ))}
+                      </tr>
+                    ))
+                  ) : data?.users && data.users.length > 0 ? (
                     data.users.map((user) => (
-                      <tr key={user.id}>
-                        <td className="px-4 py-4 text-center font-semibold whitespace-nowrap text-sm text-gray-900">
+                      <tr
+                        key={user.id}
+                        className="hover:bg-gray-50 transition-colors duration-150"
+                      >
+                        <td className="px-6 py-4 text-sm font-medium text-gray-900">
                           {user.id}
                         </td>
                         <td className="px-6 py-4">
-                          <span className="text-sm text-center whitespace-nowrap font-semibold text-gray-900">
+                          <span className="text-sm font-medium text-gray-900">
                             {user.name}
                           </span>
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        <td className="px-6 py-4 text-sm text-gray-900">
                           {user.email}
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        <td className="px-6 py-4 text-sm text-gray-900">
                           {user.referrer?.name || "N/A"}
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-center">
+                        <td className="px-6 py-4 text-sm text-gray-900 text-center">
                           {user.token}
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 text-center">
+                        <td className="px-6 py-4 text-sm font-medium text-gray-900 text-center">
                           {formatCurrency(parseFloat(user.usdt))}
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-center">
+                        <td className="px-6 py-4 text-center">
                           <span
-                            className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium ${
+                            className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${
                               user.isActive
                                 ? "bg-green-100 text-green-800"
                                 : "bg-red-100 text-red-800"
@@ -265,68 +292,70 @@ const UsersPage = () => {
                             {user.isActive ? "Active" : "Inactive"}
                           </span>
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-center">
+                        {/* <td className="px-6 py-4 text-sm whitespace-nowrap text-gray-900 text-center">
                           {formatDate(user.createdAt)}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-right flex gap-2 justify-end">
-                          {/* View Button */}
-                          <Button
-                            variant="outline"
-                            className="hover:bg-gray-100 font-semibold"
-                            size="sm"
-                            icon={<Eye className="w-4 h-4" />}
-                            onClick={() => {
-                              setSelectedUser(user);
-                              setIsViewModalOpen(true);
-                            }}
-                          >
-                            View
-                          </Button>
+                        </td> */}
+                        <td className="px-6 py-4 whitespace-nowrap text-right">
+                          <div className="flex items-center justify-end gap-2">
+                            <Button
+                              variant="outline"
+                              className="hover:bg-gray-50"
+                              size="sm"
+                              icon={<Eye className="w-4 h-4" />}
+                              onClick={() => {
+                                setSelectedUser(user);
+                                setIsViewModalOpen(true);
+                              }}
+                            >
+                              View
+                            </Button>
 
-                          {/* Block/Unblock Icon Button */}
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            className="p-2 hover:opacity-80"
-                            onClick={async () => {
-                              const result = await Swal.fire({
-                                title: user.isBlocked
-                                  ? "Unblock User?"
-                                  : "Block User?",
-                                icon: "warning",
-                                showCancelButton: true,
-                                confirmButtonText: user.isBlocked
-                                  ? "Yes, Unblock"
-                                  : "Yes, Block",
-                                cancelButtonText: "Cancel",
-                                reverseButtons: true,
-                              });
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              className={`p-2 hover:bg-gray-50 ${
+                                user.isBlocked
+                                  ? "text-red-600 border-red-200"
+                                  : "text-gray-600"
+                              }`}
+                              onClick={async () => {
+                                const result = await Swal.fire({
+                                  title: user.isBlocked
+                                    ? "Unblock User?"
+                                    : "Block User?",
+                                  icon: "warning",
+                                  showCancelButton: true,
+                                  confirmButtonText: user.isBlocked
+                                    ? "Yes, Unblock"
+                                    : "Yes, Block",
+                                  cancelButtonText: "Cancel",
+                                  reverseButtons: true,
+                                  confirmButtonColor: user.isBlocked
+                                    ? "#10B981"
+                                    : "#EF4444",
+                                });
 
-                              if (result.isConfirmed) {
-                                toggleMutation.mutate(user.id);
-                              }
-                            }}
-                            icon={
-                              <Ban
-                                className={`w-4 h-4 ${
-                                  user.isBlocked
-                                    ? "text-red-600"
-                                    : "text-gray-500"
-                                }`}
-                              />
-                            }
-                          />
+                                if (result.isConfirmed) {
+                                  toggleMutation.mutate(user.id);
+                                }
+                              }}
+                              icon={<Ban className="w-4 h-4" />}
+                            />
+                          </div>
                         </td>
                       </tr>
                     ))
                   ) : (
                     <tr>
-                      <td colSpan="9" className="px-6 py-12 text-center">
-                        <div className="flex flex-col items-center justify-center space-y-1">
-                          <Users className="w-12 h-12 mx-auto mb-2 text-gray-300" />
-                          <div className="text-lg font-medium text-gray-600">
+                      <td colSpan="9" className="px-6 py-16 text-center">
+                        <div className="flex flex-col items-center justify-center space-y-3">
+                          <Users className="w-16 h-16 text-gray-300" />
+                          <div className="text-lg font-medium text-gray-500">
                             No users found
                           </div>
+                          <p className="text-sm text-gray-400">
+                            Try adjusting your search or filters
+                          </p>
                         </div>
                       </td>
                     </tr>
@@ -335,53 +364,66 @@ const UsersPage = () => {
               </table>
             </div>
 
-            {/* Inline Pagination */}
+            {/* Pagination */}
             {data?.totalPages > 0 && (
-              <div className="flex items-center justify-between overflow-x-auto p-4 rounded-bl-lg rounded-br-lg">
-                <div className="text-sm text-gray-500">
+              <div className="flex flex-col sm:flex-row items-center justify-between px-6 py-4 border-t border-gray-200 bg-gray-50 rounded-b-xl">
+                <div className="text-sm text-gray-600 mb-4 sm:mb-0">
                   Showing{" "}
-                  <span className="font-medium">{data.currentPage}</span> to{" "}
-                  <span className="font-medium">{data.totalPages}</span> of{" "}
-                  <span className="font-medium">{data.totalItems}</span> results
+                  <span className="font-medium">{data.currentPage}</span> of{" "}
+                  <span className="font-medium">{data.totalPages}</span> pages •{" "}
+                  <span className="font-medium">{data.totalItems}</span> total
+                  users
                 </div>
 
-                <div className="flex space-x-2">
-                  <button
-                    className="px-3 py-1 cursor-pointer rounded-md border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50"
+                <div className="flex items-center gap-2">
+                  <Button
+                    variant="outline"
+                    size="sm"
                     onClick={() =>
                       data.currentPage > 1 &&
                       handlePageChange(data.currentPage - 1)
                     }
+                    disabled={data.currentPage === 1}
                   >
                     Previous
-                  </button>
+                  </Button>
 
-                  {Array.from({ length: data.totalPages }, (_, index) => (
-                    <button
-                      key={index}
-                      onClick={() =>
-                        data.currentPage !== index + 1 &&
-                        handlePageChange(index + 1)
+                  <div className="flex items-center gap-1">
+                    {Array.from(
+                      { length: Math.min(5, data.totalPages) },
+                      (_, index) => {
+                        const page = index + 1;
+                        return (
+                          <Button
+                            key={page}
+                            variant={
+                              data.currentPage === page ? "dark" : "outline"
+                            }
+                            size="sm"
+                            onClick={() => handlePageChange(page)}
+                            className="min-w-[40px]"
+                          >
+                            {page}
+                          </Button>
+                        );
                       }
-                      className={`px-3 py-1 cursor-pointer rounded-md border text-sm font-medium ${
-                        data.currentPage === index + 1
-                          ? "bg-blue-50 text-blue-600 border-blue-300"
-                          : "bg-white text-gray-700 hover:bg-gray-50 border-gray-300"
-                      }`}
-                    >
-                      {index + 1}
-                    </button>
-                  ))}
+                    )}
+                    {data.totalPages > 5 && (
+                      <span className="px-2 text-sm text-gray-500">...</span>
+                    )}
+                  </div>
 
-                  <button
-                    className="px-3 py-1 cursor-pointer rounded-md border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50"
+                  <Button
+                    variant="outline"
+                    size="sm"
                     onClick={() =>
                       data.currentPage < data.totalPages &&
                       handlePageChange(data.currentPage + 1)
                     }
+                    disabled={data.currentPage === data.totalPages}
                   >
                     Next
-                  </button>
+                  </Button>
                 </div>
               </div>
             )}

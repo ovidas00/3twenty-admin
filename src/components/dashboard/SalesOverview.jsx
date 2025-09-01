@@ -44,7 +44,7 @@ const SalesDashboard = () => {
           <h2 className="text-xl font-semibold text-gray-800 mb-6">
             Sales Overview
           </h2>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="bg-blue-50 rounded-lg p-4 border-l-4 border-blue-500">
               <p className="text-sm font-medium text-gray-600 mb-1">
                 Total Supply (3Twenty)
