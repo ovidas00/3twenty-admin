@@ -9,13 +9,14 @@ import Input from "@/components/ui/Input";
 import Alert from "@/components/ui/Alert";
 
 const LimitsPage = () => {
-  const { minimumDeposit, minimumWithdraw, minimumBuyToken } =
+  const { minimumDeposit, minimumWithdraw, minimumBuyToken, withdrawCharge } =
     useContext(ConfigContext) || {};
 
   const [formData, setFormData] = useState({
     minimumDeposit: 0,
     minimumWithdraw: 0,
     minimumBuyToken: 0,
+    withdrawCharge: 0,
   });
   const [message, setMessage] = useState(null);
 
@@ -25,8 +26,9 @@ const LimitsPage = () => {
       minimumDeposit: minimumDeposit || 0,
       minimumWithdraw: minimumWithdraw || 0,
       minimumBuyToken: minimumBuyToken || 0,
+      withdrawCharge: withdrawCharge || 0,
     });
-  }, [minimumDeposit, minimumWithdraw, minimumBuyToken]);
+  }, [minimumDeposit, minimumWithdraw, minimumBuyToken, withdrawCharge]);
 
   const updateMutation = useMutation({
     mutationFn: () =>
@@ -61,7 +63,7 @@ const LimitsPage = () => {
     <div className="bg-white p-4 md:p-6  rounded-lg shadow-sm border border-gray-200">
       <form
         onSubmit={handleSubmit}
-        className="grid grid-cols-1 md:grid-cols-3 gap-4"
+        className="grid grid-cols-1 md:grid-cols-4 gap-4"
       >
         {message && (
           <Alert
