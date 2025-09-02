@@ -13,8 +13,8 @@ import {
   Eye,
   Lock,
   Unlock,
+  Coins,
 } from "lucide-react";
-import Link from "next/link";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import api from "@/lib/api";
 import toast from "react-hot-toast";
@@ -23,6 +23,7 @@ import { useRouter } from "next/navigation";
 
 const ViewModal = ({ isOpen, onClose, selectedUser }) => {
   if (!selectedUser) return null;
+
   const router = useRouter();
   const queryClient = useQueryClient();
 
@@ -61,6 +62,7 @@ const ViewModal = ({ isOpen, onClose, selectedUser }) => {
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} title="User Information" size="lg">
+      {/* User Info Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4">
         {infoItem(<User className="w-5 h-5" />, "Name", selectedUser.name)}
         {infoItem(<AtSign className="w-5 h-5" />, "Email", selectedUser.email)}
@@ -112,22 +114,40 @@ const ViewModal = ({ isOpen, onClose, selectedUser }) => {
         )}
       </div>
 
-      {/* Action Buttons Section */}
-      <div className="flex justify-between mt-6 p-4 border-t border-gray-200">
-        <Button
-          variant="outline"
-          size="md"
-          onClick={() => {
-            onClose();
-            router.push(`/transactions?userId=${selectedUser.id}`);
-          }}
-        >
-          <Eye className="w-4 h-4 mr-2" />
-          View Transactions
-        </Button>
+      {/* Action Buttons */}
+      <div className="flex flex-col md:flex-row md:justify-between md:items-center mt-6 p-4 border-t border-gray-200 gap-2">
+        {/* Left Group: View Buttons */}
+        <div className="flex flex-col sm:flex-row gap-2">
+          <Button
+            variant="outline"
+            size="md"
+            onClick={() => {
+              onClose();
+              router.push(`/transactions?userId=${selectedUser.id}`);
+            }}
+          >
+            <Eye className="w-4 h-4 mr-2" />
+            View Transactions
+          </Button>
+
+          <Button
+            variant="outline"
+            size="md"
+            onClick={() => {
+              onClose();
+              router.push(`/stakings?userId=${selectedUser.id}`);
+            }}
+          >
+            <Coins className="w-4 h-4 mr-2" />
+            View Stakings
+          </Button>
+        </div>
+
+        {/* Right: Block/Unblock Button */}
         <Button
           variant={selectedUser.isBlocked ? "success" : "danger"}
           size="md"
+          className="mt-2 md:mt-0" // margin-top for stacked layout on mobile
           onClick={async () => {
             onClose();
 
