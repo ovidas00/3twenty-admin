@@ -154,14 +154,14 @@ const StakingPage = () => {
                   <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Amount
                   </th>
-                  <th className="px-6 py-4 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Duration (Days)
+                  <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    APY (%)
                   </th>
                   <th className="px-6 py-4 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Received Days
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    APY (%)
+                  <th className="px-6 py-4 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Last Received
                   </th>
                   <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Status
@@ -194,14 +194,14 @@ const StakingPage = () => {
                       <td className="px-6 py-4 text-sm text-gray-900">
                         {formatAmount(staking.amount)}
                       </td>
-                      <td className="px-6 py-4 text-sm text-gray-900 text-center">
-                        {staking.durationDays}
-                      </td>
-                      <td className="px-6 py-4 text-sm text-gray-900 text-center">
-                        {staking.receivedDays}
-                      </td>
                       <td className="px-6 py-4 text-sm text-gray-900">
                         {staking.apy}
+                      </td>
+                      <td className="px-6 py-4 text-sm text-gray-900 text-center">
+                        {staking.receivedDays}/{staking.durationDays}
+                      </td>
+                      <td className="px-6 py-4 text-sm text-gray-900 text-center">
+                        {formatDate(staking.lastReceived)}
                       </td>
                       <td className="px-6 py-4 text-sm text-gray-900">
                         {staking.status}
