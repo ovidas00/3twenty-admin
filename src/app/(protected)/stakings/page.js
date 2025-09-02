@@ -200,7 +200,7 @@ const StakingPage = () => {
                       <td className="px-6 py-4 text-sm text-gray-900 text-center">
                         {staking.receivedDays}/{staking.durationDays}
                       </td>
-                      <td className="px-6 py-4 text-sm text-gray-900 text-left">
+                      <td className="px-6 py-4 text-sm whitespace-nowrap text-gray-900 text-left">
                         {formatDate(staking.lastReceived)}
                       </td>
                       <td className="px-6 py-4 text-sm text-gray-900">
