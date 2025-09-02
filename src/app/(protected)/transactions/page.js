@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useRouter, useSearchParams } from "next/navigation";
 import api from "@/lib/api";
-import { Search, Filter, Users } from "lucide-react";
+import { Search, Filter, CreditCard } from "lucide-react";
 import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
 import Select from "@/components/ui/Select";
@@ -264,7 +264,7 @@ const TransactionsPage = () => {
                   <tr>
                     <td colSpan="7" className="px-6 py-16 text-center">
                       <div className="flex flex-col items-center justify-center space-y-3">
-                        <Users className="w-16 h-16 text-gray-300" />
+                        <CreditCard className="w-16 h-16 text-gray-300" />
                         <div className="text-lg font-medium text-gray-500">
                           No transactions found
                         </div>

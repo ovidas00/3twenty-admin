@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useRouter, useSearchParams } from "next/navigation";
 import api from "@/lib/api";
-import { Filter, Users } from "lucide-react";
+import { Filter, Coins } from "lucide-react";
 import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
 import Select from "@/components/ui/Select";
@@ -215,7 +215,7 @@ const StakingPage = () => {
                   <tr>
                     <td colSpan="7" className="px-6 py-16 text-center">
                       <div className="flex flex-col items-center justify-center space-y-3">
-                        <Users className="w-16 h-16 text-gray-300" />
+                        <Coins className="w-16 h-16 text-gray-300" />
                         <div className="text-lg font-medium text-gray-500">
                           No staking records found
                         </div>
