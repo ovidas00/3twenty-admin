@@ -10,7 +10,7 @@ import {
   Settings,
   X,
   LogOut,
-  ChevronUp,
+  CreditCard,
   ChevronDown,
 } from "lucide-react";
 import { useRouter, usePathname } from "next/navigation";
@@ -31,6 +31,7 @@ const Layout = ({ children }) => {
     { name: "Dashboard", href: "/", icon: Home },
     { name: "Users", href: "/users", icon: Users },
     { name: "Phases", href: "/phases", icon: Layers },
+    { name: "Transactions", href: "/transactions", icon: CreditCard },
     {
       name: "Settings",
       icon: Settings,

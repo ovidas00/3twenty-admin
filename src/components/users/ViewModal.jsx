@@ -10,10 +10,21 @@ import {
   CheckCircle,
   XCircle,
   Calendar,
+  Eye,
+  Lock,
+  Unlock,
 } from "lucide-react";
+import Link from "next/link";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import api from "@/lib/api";
+import toast from "react-hot-toast";
+import Swal from "sweetalert2";
+import { useRouter } from "next/navigation";
 
 const ViewModal = ({ isOpen, onClose, selectedUser }) => {
   if (!selectedUser) return null;
+  const router = useRouter();
+  const queryClient = useQueryClient();
 
   const formatDate = (dateStr) =>
     dateStr
@@ -37,6 +48,16 @@ const ViewModal = ({ isOpen, onClose, selectedUser }) => {
       </div>
     </div>
   );
+
+  const toggleMutation = useMutation({
+    mutationFn: (id) => api.post(`/users/${id}/toggle-block`),
+    onSuccess: (response) => {
+      queryClient.invalidateQueries({ queryKey: ["users"] });
+      toast.success(response.data.message);
+    },
+    onError: (error) =>
+      toast.error(error.response?.data?.message || error.message),
+  });
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} title="User Information" size="lg">
@@ -91,9 +112,55 @@ const ViewModal = ({ isOpen, onClose, selectedUser }) => {
         )}
       </div>
 
-      <div className="flex justify-end mt-6">
-        <Button variant="dark" size="md" onClick={onClose}>
-          Close
+      {/* Action Buttons Section */}
+      <div className="flex justify-between mt-6 p-4 border-t border-gray-200">
+        <Button
+          variant="outline"
+          size="md"
+          onClick={() => {
+            onClose();
+            router.push(`/transactions?userId=${selectedUser.id}`);
+          }}
+        >
+          <Eye className="w-4 h-4 mr-2" />
+          View Transactions
+        </Button>
+        <Button
+          variant={selectedUser.isBlocked ? "success" : "danger"}
+          size="md"
+          onClick={async () => {
+            onClose();
+
+            const result = await Swal.fire({
+              title: selectedUser.isBlocked ? "Unblock User?" : "Block User?",
+              icon: "warning",
+              showCancelButton: true,
+              confirmButtonText: selectedUser.isBlocked
+                ? "Yes, Unblock"
+                : "Yes, Block",
+              cancelButtonText: "Cancel",
+              reverseButtons: true,
+              confirmButtonColor: selectedUser.isBlocked
+                ? "#10B981"
+                : "#EF4444",
+            });
+
+            if (result.isConfirmed) {
+              toggleMutation.mutate(selectedUser.id);
+            }
+          }}
+        >
+          {selectedUser.isBlocked ? (
+            <>
+              <Unlock className="w-4 h-4 mr-2" />
+              Unblock User
+            </>
+          ) : (
+            <>
+              <Lock className="w-4 h-4 mr-2" />
+              Block User
+            </>
+          )}
         </Button>
       </div>
     </Modal>

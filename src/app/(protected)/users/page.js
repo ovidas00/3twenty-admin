@@ -4,13 +4,23 @@ import { useState, useEffect } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter, useSearchParams } from "next/navigation";
 import api from "@/lib/api";
-import { Users, Search, Filter, Eye, Ban } from "lucide-react";
+import {
+  Users,
+  Search,
+  Filter,
+  Eye,
+  Ban,
+  CreditCard,
+  Lock,
+  LockOpen,
+} from "lucide-react";
 import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
 import Select from "@/components/ui/Select";
 import ViewModal from "@/components/users/ViewModal";
 import toast from "react-hot-toast";
 import Swal from "sweetalert2";
+import Link from "next/link";
 
 const UsersPage = () => {
   const router = useRouter();
@@ -34,16 +44,6 @@ const UsersPage = () => {
       const response = await api.get(`/users?${appliedParams}`);
       return response.data.payload;
     },
-  });
-
-  const toggleMutation = useMutation({
-    mutationFn: (id) => api.post(`/users/${id}/toggle-block`),
-    onSuccess: (response) => {
-      queryClient.invalidateQueries({ queryKey: ["users"] });
-      toast.success(response.data.message);
-    },
-    onError: (error) =>
-      toast.error(error.response?.data?.message || error.message),
   });
 
   // Sync filters + applied params with URL on load and on URL change
@@ -299,6 +299,7 @@ const UsersPage = () => {
                           <div className="flex items-center justify-end gap-2">
                             <Button
                               variant="outline"
+                              title="View Info"
                               className="hover:bg-gray-50"
                               size="sm"
                               icon={<Eye className="w-4 h-4" />}
@@ -309,38 +310,6 @@ const UsersPage = () => {
                             >
                               View
                             </Button>
-
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              className={`p-2 hover:bg-gray-50 ${
-                                user.isBlocked
-                                  ? "text-red-600 border-red-200"
-                                  : "text-gray-600"
-                              }`}
-                              onClick={async () => {
-                                const result = await Swal.fire({
-                                  title: user.isBlocked
-                                    ? "Unblock User?"
-                                    : "Block User?",
-                                  icon: "warning",
-                                  showCancelButton: true,
-                                  confirmButtonText: user.isBlocked
-                                    ? "Yes, Unblock"
-                                    : "Yes, Block",
-                                  cancelButtonText: "Cancel",
-                                  reverseButtons: true,
-                                  confirmButtonColor: user.isBlocked
-                                    ? "#10B981"
-                                    : "#EF4444",
-                                });
-
-                                if (result.isConfirmed) {
-                                  toggleMutation.mutate(user.id);
-                                }
-                              }}
-                              icon={<Ban className="w-4 h-4" />}
-                            />
                           </div>
                         </td>
                       </tr>
