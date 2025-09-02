@@ -248,7 +248,7 @@ const UsersPage = () => {
                     // Loading skeleton
                     Array.from({ length: 5 }).map((_, index) => (
                       <tr key={index}>
-                        {Array.from({ length: 9 }).map((_, cellIndex) => (
+                        {Array.from({ length: 8 }).map((_, cellIndex) => (
                           <td key={cellIndex} className="px-6 py-4">
                             <div className="h-4 bg-gray-200 rounded animate-pulse"></div>
                           </td>
