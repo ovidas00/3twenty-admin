@@ -12,6 +12,7 @@ import {
   LogOut,
   CreditCard,
   ChevronDown,
+  Coins,
 } from "lucide-react";
 import { useRouter, usePathname } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
@@ -32,6 +33,7 @@ const Layout = ({ children }) => {
     { name: "Users", href: "/users", icon: Users },
     { name: "Phases", href: "/phases", icon: Layers },
     { name: "Transactions", href: "/transactions", icon: CreditCard },
+    { name: "Stakings", href: "/stakings", icon: Coins },
     {
       name: "Settings",
       icon: Settings,
