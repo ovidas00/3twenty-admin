@@ -223,16 +223,8 @@ const PhasesPage = () => {
                             No phases found
                           </div>
                           <p className="text-sm text-gray-400">
-                            Get started by adding your first phase
+                            Get started by adding a phase
                           </p>
-                          <Button
-                            variant="dark"
-                            onClick={() => setIsAddModalOpen(true)}
-                            icon={<Plus className="w-4 h-4" />}
-                            size="sm"
-                          >
-                            Add Phase
-                          </Button>
                         </div>
                       </td>
                     </tr>
