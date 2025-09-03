@@ -14,6 +14,7 @@ import {
   Lock,
   Unlock,
   Coins,
+  Network,
 } from "lucide-react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import api from "@/lib/api";
@@ -158,6 +159,19 @@ const ViewModal = ({ isOpen, onClose, selectedUser }) => {
               >
                 <Coins className="w-4 h-4 mr-2" />
                 View Stakings
+              </Button>
+
+              <Button
+                variant="outline"
+                size="md"
+                className="w-full justify-center py-3 border-blue-200 text-blue-700 hover:bg-blue-100"
+                onClick={() => {
+                  onClose();
+                  router.push(`/referrals/${selectedUser.id}/tree`);
+                }}
+              >
+                <Network className="w-4 h-4 mr-2" />
+                View Referral Tree
               </Button>
             </div>
 
