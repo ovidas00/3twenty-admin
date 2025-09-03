@@ -7,19 +7,28 @@ import { ConfigContext } from "../layout";
 import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
 import Alert from "@/components/ui/Alert";
-import { Settings, Award, Save, Crown, Star, Target } from "lucide-react";
-import { Coins } from "lucide-react";
+import {
+  Settings,
+  Award,
+  Save,
+  Crown,
+  Star,
+  Target,
+  Coins,
+} from "lucide-react";
 
 const RankingPage = () => {
   const { RANKING_MAP } = useContext(ConfigContext) || {};
   const [formData, setFormData] = useState({});
   const [message, setMessage] = useState(null);
 
-  // Initialize form data from config
+  // Initialize form data with 6 ranks
   useEffect(() => {
-    if (RANKING_MAP) {
-      setFormData(RANKING_MAP);
+    const initialData = {};
+    for (let i = 1; i <= 6; i++) {
+      initialData[i] = RANKING_MAP?.[i] ?? 0; // Default to 0 if missing
     }
+    setFormData(initialData);
   }, [RANKING_MAP]);
 
   const updateMutation = useMutation({
@@ -106,7 +115,7 @@ const RankingPage = () => {
                   }
                   placeholder="0.0"
                   size="sm"
-                  required={true}
+                  required
                   icon={() => (
                     <span className="text-gray-400">
                       <Coins className="w-4 h-4" />
