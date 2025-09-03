@@ -4,29 +4,19 @@ import { useState, useEffect } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter, useSearchParams } from "next/navigation";
 import api from "@/lib/api";
-import {
-  Users,
-  Search,
-  Filter,
-  Eye,
-  Ban,
-  CreditCard,
-  Lock,
-  LockOpen,
-} from "lucide-react";
+import { Users, Search, Filter, Eye, Wallet } from "lucide-react";
 import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
 import Select from "@/components/ui/Select";
 import ViewModal from "@/components/users/ViewModal";
-import toast from "react-hot-toast";
-import Swal from "sweetalert2";
-import Link from "next/link";
+import WalletModal from "@/components/users/WalletModal";
 
 const UsersPage = () => {
   const router = useRouter();
   const queryClient = useQueryClient();
   const searchParams = useSearchParams();
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
+  const [isWalletModalOpen, setIsWalletModalOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
 
   // local state for filter inputs
@@ -125,6 +115,13 @@ const UsersPage = () => {
         isOpen={isViewModalOpen}
         onClose={() => setIsViewModalOpen(false)}
         selectedUser={selectedUser}
+      />
+
+      {/* Wallet Modal */}
+      <WalletModal
+        isOpen={isWalletModalOpen}
+        onClose={() => setIsWalletModalOpen(false)}
+        user={selectedUser}
       />
 
       <div className="p-4 md:p-6">
@@ -310,6 +307,18 @@ const UsersPage = () => {
                             >
                               View
                             </Button>
+
+                            <Button
+                              variant="outline"
+                              title="Manage Wallet"
+                              className="hover:bg-gray-50"
+                              size="sm"
+                              icon={<Wallet className="w-4 h-4" />}
+                              onClick={() => {
+                                setSelectedUser(user);
+                                setIsWalletModalOpen(true);
+                              }}
+                            ></Button>
                           </div>
                         </td>
                       </tr>
