@@ -152,7 +152,8 @@ const PhasesPage = () => {
                           {formatDate(phase.end)}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-right">
-                          {phase.supply.toLocaleString()}
+                          {new Intl.NumberFormat().format(phase.available)}/
+                          {new Intl.NumberFormat().format(phase.supply)}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900 text-right">
                           {formatCurrency(phase.price)}
