@@ -247,7 +247,7 @@ const TransactionsPage = () => {
                         {tx.transactionType}
                       </td>
                       <td className="px-6 py-4 text-sm text-gray-900 text-center">
-                        {tx.amount}
+                        {new Intl.NumberFormat().format(tx.amount)}
                       </td>
                       <td className="px-6 py-4 text-sm text-gray-900">
                         {tx.currency}

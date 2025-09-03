@@ -276,7 +276,7 @@ const UsersPage = () => {
                           {user.referrer?.name || "N/A"}
                         </td>
                         <td className="px-6 py-4 text-sm text-gray-900 text-center">
-                          {user.token}
+                          {new Intl.NumberFormat().format(user.token)}
                         </td>
                         <td className="px-6 py-4 text-sm font-medium text-gray-900 text-center">
                           {formatCurrency(parseFloat(user.usdt))}

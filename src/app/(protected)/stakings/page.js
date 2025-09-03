@@ -195,7 +195,7 @@ const StakingPage = () => {
                         {formatAmount(staking.amount)}
                       </td>
                       <td className="px-6 py-4 text-sm text-gray-900">
-                        {staking.apy}
+                        {new Intl.NumberFormat().format(staking.apy)}
                       </td>
                       <td className="px-6 py-4 text-sm text-gray-900 text-center">
                         {staking.receivedDays}/{staking.durationDays}
