@@ -117,7 +117,7 @@ const LimitsPage = () => {
                   type="number"
                   label={formatLabel(field)}
                   step="0.01"
-                  min="0.01"
+                  min="0"
                   value={value}
                   onChange={(e) =>
                     setFormData((prev) => ({
