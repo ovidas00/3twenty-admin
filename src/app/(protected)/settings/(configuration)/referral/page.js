@@ -7,22 +7,20 @@ import { ConfigContext } from "../layout";
 import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
 import Alert from "@/components/ui/Alert";
-import { Settings, Users, Save, User } from "lucide-react";
+import { Settings, Save } from "lucide-react";
 
 const ReferralPage = () => {
   const { PROFIT_MAP } = useContext(ConfigContext) || {};
   const [formData, setFormData] = useState({});
   const [message, setMessage] = useState(null);
 
-  // Initialize form data from config
+  // Initialize form data with 6 levels
   useEffect(() => {
-    if (PROFIT_MAP) {
-      const initialData = {};
-      Object.entries(PROFIT_MAP).forEach(([level, value]) => {
-        initialData[level] = value * 100; // Convert to percentage for input
-      });
-      setFormData(initialData);
+    const initialData = {};
+    for (let i = 1; i <= 6; i++) {
+      initialData[i] = PROFIT_MAP?.[i] ? PROFIT_MAP[i] * 100 : 0; // Convert to percentage or default to 0
     }
+    setFormData(initialData);
   }, [PROFIT_MAP]);
 
   const updateMutation = useMutation({
@@ -105,7 +103,7 @@ const ReferralPage = () => {
                   }
                   placeholder="0.00"
                   size="sm"
-                  required={true}
+                  required
                   icon={() => <span className="text-gray-400">%</span>}
                   className="w-full"
                 />
