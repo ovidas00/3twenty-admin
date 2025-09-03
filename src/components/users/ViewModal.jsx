@@ -39,13 +39,17 @@ const ViewModal = ({ isOpen, onClose, selectedUser }) => {
       : "N/A";
 
   const infoItem = (icon, label, value, valueClass = "") => (
-    <div className="flex items-center gap-2 p-2">
-      <div className="w-6 h-6 flex items-center justify-center text-gray-500">
+    <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg">
+      <div className="w-6 h-6 flex items-center justify-center text-blue-500 mt-0.5">
         {icon}
       </div>
-      <div className="flex-1 text-gray-700">
-        <div className="text-sm font-medium">{label}</div>
-        <div className={`text-base font-semibold ${valueClass}`}>{value}</div>
+      <div className="flex-1">
+        <div className="text-xs font-medium text-gray-500 uppercase tracking-wide">
+          {label}
+        </div>
+        <div className={`text-sm font-semibold text-gray-800 ${valueClass}`}>
+          {value}
+        </div>
       </div>
     </div>
   );
@@ -61,127 +65,155 @@ const ViewModal = ({ isOpen, onClose, selectedUser }) => {
   });
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title="User Information" size="lg">
-      {/* User Info Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4">
-        {infoItem(<User className="w-5 h-5" />, "Name", selectedUser.name)}
-        {infoItem(<AtSign className="w-5 h-5" />, "Email", selectedUser.email)}
-        {infoItem(
-          <Gift className="w-5 h-5" />,
-          "Referral Code",
-          selectedUser.referralCode
-        )}
-        {infoItem(
-          <User className="w-5 h-5" />,
-          "Referrer",
-          selectedUser.referrer?.name || "-"
-        )}
-        {infoItem(
-          <DollarSign className="w-5 h-5" />,
-          "Token",
-          selectedUser.token
-        )}
-        {infoItem(
-          <DollarSign className="w-5 h-5" />,
-          "USDT",
-          selectedUser.usdt
-        )}
-        {infoItem(
-          selectedUser.isActive ? (
-            <CheckCircle className="w-5 h-5" />
-          ) : (
-            <XCircle className="w-5 h-5" />
-          ),
-          "Status",
-          `${selectedUser.isActive ? "Active" : "Inactive"} / ${
-            selectedUser.isBlocked ? "Blocked" : "Unblocked"
-          }`
-        )}
-        {infoItem(
-          <User className="w-5 h-5" />,
-          "Rank",
-          selectedUser.rank || "-"
-        )}
-        {infoItem(
-          <Calendar className="w-5 h-5" />,
-          "Joining Date",
-          formatDate(selectedUser.createdAt)
-        )}
-        {infoItem(
-          <Calendar className="w-5 h-5" />,
-          "Last Updated",
-          formatDate(selectedUser.updatedAt)
-        )}
-      </div>
-
-      {/* Action Buttons */}
-      <div className="flex flex-col md:flex-row md:justify-between md:items-center mt-6 p-4 border-t border-gray-200 gap-2">
-        {/* Left Group: View Buttons */}
-        <div className="flex flex-col sm:flex-row gap-2">
-          <Button
-            variant="outline"
-            size="md"
-            onClick={() => {
-              onClose();
-              router.push(`/transactions?userId=${selectedUser.id}`);
-            }}
-          >
-            <Eye className="w-4 h-4 mr-2" />
-            View Transactions
-          </Button>
-
-          <Button
-            variant="outline"
-            size="md"
-            onClick={() => {
-              onClose();
-              router.push(`/stakings?userId=${selectedUser.id}`);
-            }}
-          >
-            <Coins className="w-4 h-4 mr-2" />
-            View Stakings
-          </Button>
+    <Modal isOpen={isOpen} onClose={onClose} title="User Details" size="lg">
+      <div className="flex flex-col lg:flex-row gap-6 p-2">
+        {/* Left Column: User Information */}
+        <div className="flex-1">
+          <div className="grid grid-cols-1 gap-3">
+            {infoItem(
+              <User className="w-5 h-5" />,
+              "Full Name",
+              selectedUser.name
+            )}
+            {infoItem(
+              <AtSign className="w-5 h-5" />,
+              "Email Address",
+              selectedUser.email
+            )}
+            {infoItem(
+              <Gift className="w-5 h-5" />,
+              "Referral Code",
+              selectedUser.referralCode
+            )}
+            {infoItem(
+              <User className="w-5 h-5" />,
+              "Referrer",
+              selectedUser.referrer?.name || "No referrer"
+            )}
+            {infoItem(
+              selectedUser.isActive ? (
+                <CheckCircle className="w-5 h-5 text-green-500" />
+              ) : (
+                <XCircle className="w-5 h-5 text-red-500" />
+              ),
+              "Account Status",
+              selectedUser.isActive ? "Active" : "Inactive"
+            )}
+            {infoItem(
+              selectedUser.isBlocked ? (
+                <Lock className="w-5 h-5 text-red-500" />
+              ) : (
+                <Unlock className="w-5 h-5 text-green-500" />
+              ),
+              "Block Status",
+              selectedUser.isBlocked ? "Blocked" : "Not Blocked"
+            )}
+            {infoItem(
+              <User className="w-5 h-5" />,
+              "User Rank",
+              selectedUser.rank || "No rank"
+            )}
+            {infoItem(
+              <Calendar className="w-5 h-5" />,
+              "Member Since",
+              formatDate(selectedUser.createdAt)
+            )}
+            {infoItem(
+              <Calendar className="w-5 h-5" />,
+              "Last Updated",
+              formatDate(selectedUser.updatedAt)
+            )}
+          </div>
         </div>
 
-        {/* Right: Block/Unblock Button */}
-        <Button
-          variant={selectedUser.isBlocked ? "success" : "danger"}
-          size="md"
-          className="mt-2 md:mt-0" // margin-top for stacked layout on mobile
-          onClick={async () => {
-            onClose();
+        {/* Right Column: Action Buttons */}
+        <div className="lg:w-2/5 xl:w-1/3 flex flex-col gap-4">
+          <div className="bg-blue-50 p-4 rounded-lg border border-blue-100">
+            <h3 className="text-lg font-semibold text-blue-800 mb-3 flex items-center gap-2">
+              User Actions
+            </h3>
 
-            const result = await Swal.fire({
-              title: selectedUser.isBlocked ? "Unblock User?" : "Block User?",
-              icon: "warning",
-              showCancelButton: true,
-              confirmButtonText: selectedUser.isBlocked
-                ? "Yes, Unblock"
-                : "Yes, Block",
-              cancelButtonText: "Cancel",
-              reverseButtons: true,
-              confirmButtonColor: selectedUser.isBlocked
-                ? "#10B981"
-                : "#EF4444",
-            });
+            <div className="space-y-3">
+              <Button
+                variant="outline"
+                size="md"
+                className="w-full justify-center py-3 border-blue-200 text-blue-700 hover:bg-blue-100"
+                onClick={() => {
+                  onClose();
+                  router.push(`/transactions?userId=${selectedUser.id}`);
+                }}
+              >
+                <Eye className="w-4 h-4 mr-2" />
+                View Transactions
+              </Button>
 
-            if (result.isConfirmed) {
-              toggleMutation.mutate(selectedUser.id);
-            }
-          }}
-        >
-          {selectedUser.isBlocked ? (
-            <>
-              <Unlock className="w-4 h-4 mr-2" />
-              Unblock User
-            </>
-          ) : (
-            <>
-              <Lock className="w-4 h-4 mr-2" />
-              Block User
-            </>
-          )}
-        </Button>
+              <Button
+                variant="outline"
+                size="md"
+                className="w-full justify-center py-3 border-blue-200 text-blue-700 hover:bg-blue-100"
+                onClick={() => {
+                  onClose();
+                  router.push(`/stakings?userId=${selectedUser.id}`);
+                }}
+              >
+                <Coins className="w-4 h-4 mr-2" />
+                View Stakings
+              </Button>
+            </div>
+
+            <div className="mt-4 pt-4 border-t border-blue-200">
+              <Button
+                variant={selectedUser.isBlocked ? "success" : "danger"}
+                size="md"
+                className="w-full justify-center py-3"
+                onClick={async () => {
+                  onClose();
+
+                  const result = await Swal.fire({
+                    title: selectedUser.isBlocked
+                      ? "Unblock User?"
+                      : "Block User?",
+                    text: selectedUser.isBlocked
+                      ? "This user will be able to access their account again."
+                      : "This user will not be able to access their account.",
+                    icon: "question",
+                    showCancelButton: true,
+                    confirmButtonText: selectedUser.isBlocked
+                      ? "Yes, Unblock"
+                      : "Yes, Block",
+                    cancelButtonText: "Cancel",
+                    reverseButtons: true,
+                    confirmButtonColor: selectedUser.isBlocked
+                      ? "#10B981"
+                      : "#EF4444",
+                  });
+
+                  if (result.isConfirmed) {
+                    toggleMutation.mutate(selectedUser.id);
+                  }
+                }}
+              >
+                {selectedUser.isBlocked ? (
+                  <>
+                    <Unlock className="w-4 h-4 mr-2" />
+                    Unblock User
+                  </>
+                ) : (
+                  <>
+                    <Lock className="w-4 h-4 mr-2" />
+                    Block User
+                  </>
+                )}
+              </Button>
+
+              <p className="text-xs text-gray-500 mt-2 text-center">
+                {selectedUser.isBlocked
+                  ? "User account is currently blocked"
+                  : "User account is currently active"}
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
     </Modal>
   );
