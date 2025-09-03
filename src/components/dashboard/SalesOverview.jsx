@@ -30,7 +30,7 @@ const SalesDashboard = () => {
 
   // Pie only shows Sold vs Remaining
   const pieData = [
-    { name: "Sold 3Twenty", value: runningSalesStats?.total3TWENTY ?? 0 },
+    { name: "Sold 3TWENTY", value: runningSalesStats?.total3TWENTY ?? 0 },
     { name: "Remaining", value: runningSalesStats?.totalAvailable ?? 0 },
   ];
 
@@ -47,7 +47,7 @@ const SalesDashboard = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="bg-blue-50 rounded-lg p-4 border-l-4 border-blue-500">
               <p className="text-sm font-medium text-gray-600 mb-1">
-                Total Supply (3Twenty)
+                Total Supply (3TWENTY)
               </p>
               <p className="text-xl font-bold text-gray-900">
                 {salesLoading ? (
@@ -59,7 +59,7 @@ const SalesDashboard = () => {
             </div>
             <div className="bg-green-50 rounded-lg p-4 border-l-4 border-green-500">
               <p className="text-sm font-medium text-gray-600 mb-1">
-                Total Sold (3Twenty)
+                Total Sold (3TWENTY)
               </p>
               <p className="text-xl font-bold text-gray-900">
                 {salesLoading ? (
@@ -151,7 +151,7 @@ const SalesDashboard = () => {
             <div className="flex-1 grid grid-cols-1 gap-4 w-full">
               <div className="bg-blue-50 rounded-lg p-4 border-l-4 border-blue-500">
                 <p className="text-sm font-medium text-gray-600 mb-1">
-                  Total Supply (3Twenty)
+                  Total Supply (3TWENTY)
                 </p>
                 <p className="text-xl font-bold text-gray-900">
                   {runningSalesLoading ? (

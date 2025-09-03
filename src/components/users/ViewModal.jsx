@@ -79,7 +79,18 @@ const ViewModal = ({ isOpen, onClose, selectedUser }) => {
             {infoItem(
               <AtSign className="w-5 h-5" />,
               "Email Address",
-              selectedUser.email
+              <>
+                {selectedUser.email}{" "}
+                {selectedUser.isVerified ? (
+                  <span className="ml-2 inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-700 border border-green-300">
+                    Verified
+                  </span>
+                ) : (
+                  <span className="ml-2 inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-700 border border-red-300">
+                    Not Verified
+                  </span>
+                )}
+              </>
             )}
             {infoItem(
               <Gift className="w-5 h-5" />,
@@ -89,7 +100,7 @@ const ViewModal = ({ isOpen, onClose, selectedUser }) => {
             {infoItem(
               <User className="w-5 h-5" />,
               "Referrer",
-              selectedUser.referrer?.name || "No referrer"
+              selectedUser.referrer?.name || "No Referrer"
             )}
             {infoItem(
               selectedUser.isActive ? (
@@ -112,7 +123,7 @@ const ViewModal = ({ isOpen, onClose, selectedUser }) => {
             {infoItem(
               <User className="w-5 h-5" />,
               "User Rank",
-              selectedUser.rank || "No rank"
+              selectedUser.rank || "No Rank"
             )}
             {infoItem(
               <Calendar className="w-5 h-5" />,
