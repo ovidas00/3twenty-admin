@@ -14,7 +14,6 @@ const UpdateModal = ({ isOpen, onClose, selectedPhase }) => {
     name: "",
     start: "",
     end: "",
-    supply: "",
     price: "",
     description: "",
   });
@@ -26,7 +25,6 @@ const UpdateModal = ({ isOpen, onClose, selectedPhase }) => {
         name: selectedPhase.name || "",
         start: selectedPhase.start?.slice(0, 10) || "",
         end: selectedPhase.end?.slice(0, 10) || "",
-        supply: selectedPhase.supply || "",
         price: selectedPhase.price || "",
         description: selectedPhase.description || "",
       });
@@ -117,18 +115,6 @@ const UpdateModal = ({ isOpen, onClose, selectedPhase }) => {
           label="End Date"
           required
           value={formData.end}
-          onChange={handleChange}
-        />
-
-        {/* Supply */}
-        <Input
-          id="supply"
-          name="supply"
-          type="number"
-          label="Total Supply"
-          required
-          placeholder="Enter supply amount"
-          value={formData.supply}
           onChange={handleChange}
         />
 
