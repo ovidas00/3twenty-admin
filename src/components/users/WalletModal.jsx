@@ -4,11 +4,12 @@ import { useState } from "react";
 import Modal from "@/components/ui/Modal";
 import Button from "@/components/ui/Button";
 import { DollarSign, Coins, Plus, Minus, Wallet } from "lucide-react";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import api from "@/lib/api";
 import toast from "react-hot-toast";
 
 const WalletModal = ({ isOpen, onClose, user }) => {
+  const queryClient = useQueryClient();
   const [activeTab, setActiveTab] = useState("USDT");
   const [amount, setAmount] = useState("");
   const [transactionType, setTransactionType] = useState("add");
@@ -19,6 +20,8 @@ const WalletModal = ({ isOpen, onClose, user }) => {
     onSuccess: (response) => {
       onClose();
       toast.success(response.data.message);
+      setAmount("");
+      queryClient.invalidateQueries({ queryKey: ["users"] });
     },
     onError: (error) =>
       toast.error(error.response?.data?.message || error.message),
