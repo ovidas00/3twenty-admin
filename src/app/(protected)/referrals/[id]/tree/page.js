@@ -17,20 +17,15 @@ const ReferralTreePage = ({ params }) => {
     },
   });
 
-  const processTreeData = (treeData, rootId) => {
-    const levels = [[], [], [], [], [], []];
-    if (treeData[rootId]) {
-      levels[0] = treeData[rootId];
-      for (let i = 0; i < 5; i++) {
-        levels[i].forEach((person) => {
-          if (treeData[person.id]) {
-            levels[i + 1] = levels[i + 1].concat(treeData[person.id]);
-          }
-        });
-      }
+  const processTreeData = (treeData) => {
+  const levels = [[], [], [], [], [], []]; // Level 1–6
+  for (let i = 1; i <= 6; i++) {
+    if (treeData[String(i)]) {
+      levels[i - 1] = treeData[String(i)];
     }
-    return levels;
-  };
+  }
+  return levels;
+};
 
   const levels = data ? processTreeData(data, id) : [[], [], [], [], [], []];
 
