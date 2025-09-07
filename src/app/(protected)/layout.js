@@ -13,6 +13,7 @@ import {
   CreditCard,
   ChevronDown,
   Coins,
+  Wallet,
 } from "lucide-react";
 import { useRouter, usePathname } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
@@ -31,9 +32,10 @@ const Layout = ({ children }) => {
   const navigation = [
     { name: "Dashboard", href: "/", icon: Home },
     { name: "Users", href: "/users", icon: Users },
-    { name: "Phases", href: "/phases", icon: Layers },
     { name: "Transactions", href: "/transactions", icon: CreditCard },
+    { name: "Wallet Histories", href: "/wallet-histories", icon: Wallet },
     { name: "Stakings", href: "/stakings", icon: Coins },
+    { name: "Phases", href: "/phases", icon: Layers },
     {
       name: "Settings",
       icon: Settings,
