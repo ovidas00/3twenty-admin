@@ -30,7 +30,12 @@ const SalesDashboard = () => {
 
   // Pie only shows Sold vs Remaining
   const pieData = [
-    { name: "Sold 3TWENTY", value: runningSalesStats?.total3TWENTY ?? 0 },
+    {
+      name: "Sold 3TWENTY",
+      value:
+        (runningSalesStats?.totalSupply ?? 0) -
+        (runningSalesStats?.totalAvailable ?? 0),
+    },
     { name: "Remaining", value: runningSalesStats?.totalAvailable ?? 0 },
   ];
 
@@ -172,7 +177,8 @@ const SalesDashboard = () => {
                     <span className="inline-block h-7 w-20 bg-gray-200 rounded animate-pulse"></span>
                   ) : (
                     new Intl.NumberFormat().format(
-                      runningSalesStats?.total3TWENTY ?? 0
+                      (runningSalesStats?.totalSupply ?? 0) -
+                        (runningSalesStats?.totalAvailable ?? 0)
                     )
                   )}
                 </p>
