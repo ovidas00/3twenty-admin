@@ -185,7 +185,7 @@ const WalletPage = () => {
                   <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Transaction Type
                   </th>
-                  <th className="px-6 py-4 text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-4 text-xs font-medium text-left text-gray-500 uppercase tracking-wider">
                     Amount
                   </th>
                   <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -223,11 +223,22 @@ const WalletPage = () => {
                       <td className="px-6 py-4 text-sm text-gray-900">
                         {history.transactionType}
                       </td>
-                      <td className="px-6 py-4 text-sm text-gray-900 text-center">
+                      <td className="px-6 py-4 text-sm text-gray-900 font-medium">
                         {parseFloat(history.amount)}
                       </td>
                       <td className="px-6 py-4 text-sm text-gray-900">
-                        {history.status}
+                        <span
+                          className={`px-2 py-1 rounded-full text-xs font-medium
+      ${
+        history.status === "Completed"
+          ? "bg-green-100 text-green-800"
+          : tx.status === "Pending"
+          ? "bg-yellow-100 text-yellow-800"
+          : "bg-gray-100 text-gray-800"
+      }`}
+                        >
+                          {history.status}
+                        </span>
                       </td>
                       <td className="px-6 py-4 text-sm text-gray-900 text-right whitespace-nowrap">
                         {formatDateTime(history.createdAt)}

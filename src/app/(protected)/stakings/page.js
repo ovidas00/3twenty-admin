@@ -191,7 +191,7 @@ const StakingPage = () => {
                       <td className="px-6 py-4 text-sm text-gray-900">
                         {staking.user?.name}
                       </td>
-                      <td className="px-6 py-4 text-sm text-gray-900">
+                      <td className="px-6 py-4 text-sm text-gray-900 font-medium">
                         {formatAmount(staking.amount)}
                       </td>
                       <td className="px-6 py-4 text-sm text-gray-900">
@@ -204,7 +204,18 @@ const StakingPage = () => {
                         {formatDate(staking.lastReceived)}
                       </td>
                       <td className="px-6 py-4 text-sm text-gray-900">
-                        {staking.status}
+                        <span
+                          className={`px-2 py-1 rounded-full text-xs font-medium
+      ${
+        staking.status === "Running"
+          ? "bg-blue-100 text-blue-800"
+          : staking.status === "Matured"
+          ? "bg-purple-100 text-purple-800"
+          : "bg-gray-100 text-gray-800"
+      }`}
+                        >
+                          {staking.status}
+                        </span>
                       </td>
                       <td className="px-6 py-4 text-sm whitespace-nowrap text-gray-900 text-right">
                         {formatDate(staking.createdAt)}
