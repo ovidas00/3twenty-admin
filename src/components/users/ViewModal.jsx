@@ -15,6 +15,9 @@ import {
   Unlock,
   Coins,
   Network,
+  Phone,
+  Wallet,
+  MapPin,
 } from "lucide-react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import api from "@/lib/api";
@@ -28,14 +31,13 @@ const ViewModal = ({ isOpen, onClose, selectedUser }) => {
   const router = useRouter();
   const queryClient = useQueryClient();
 
-  const formatDate = (dateStr) =>
+  const formatDate = (dateStr, showTime = true) =>
     dateStr
       ? new Date(dateStr).toLocaleDateString("en-US", {
           year: "numeric",
           month: "short",
           day: "numeric",
-          hour: "2-digit",
-          minute: "2-digit",
+          ...(showTime && { hour: "2-digit", minute: "2-digit" }),
         })
       : "N/A";
 
@@ -70,17 +72,17 @@ const ViewModal = ({ isOpen, onClose, selectedUser }) => {
       <div className="flex flex-col lg:flex-row gap-6 p-2">
         {/* Left Column: User Information */}
         <div className="flex-1">
-          <div className="grid grid-cols-1 gap-3">
-            {infoItem(
-              <User className="w-5 h-5" />,
-              "Full Name",
-              selectedUser.name
-            )}
-            {infoItem(
-              <AtSign className="w-5 h-5" />,
-              "Email Address",
-              <>
-                {selectedUser.email}{" "}
+          {/* Profile Header */}
+          <div className="flex items-center gap-4 mb-4">
+            <img
+              src={selectedUser.profilePicture || "/default-avatar.png"}
+              alt={selectedUser.name}
+              className="w-16 h-16 rounded-full border shadow"
+            />
+            <div>
+              <h2 className="text-lg font-semibold">{selectedUser.name}</h2>
+              <p className="text-sm text-gray-500">
+                {selectedUser.email}
                 {selectedUser.isVerified ? (
                   <span className="ml-2 inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-700 border border-green-300">
                     Verified
@@ -90,8 +92,12 @@ const ViewModal = ({ isOpen, onClose, selectedUser }) => {
                     Not Verified
                   </span>
                 )}
-              </>
-            )}
+              </p>
+            </div>
+          </div>
+
+          {/* Info Grid */}
+          <div className="grid grid-cols-1 gap-3">
             {infoItem(
               <Gift className="w-5 h-5" />,
               "Referral Code",
@@ -109,7 +115,15 @@ const ViewModal = ({ isOpen, onClose, selectedUser }) => {
                 <XCircle className="w-5 h-5 text-red-500" />
               ),
               "Account Status",
-              selectedUser.isActive ? "Active" : "Inactive"
+              selectedUser.isActive ? (
+                <span className="inline-flex px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-700 border border-green-300">
+                  Active
+                </span>
+              ) : (
+                <span className="inline-flex px-2 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-700 border border-red-300">
+                  Inactive
+                </span>
+              )
             )}
             {infoItem(
               selectedUser.isBlocked ? (
@@ -118,12 +132,37 @@ const ViewModal = ({ isOpen, onClose, selectedUser }) => {
                 <Unlock className="w-5 h-5 text-green-500" />
               ),
               "Block Status",
-              selectedUser.isBlocked ? "Blocked" : "Not Blocked"
+              selectedUser.isBlocked ? (
+                <span className="inline-flex px-2 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-700 border border-red-300">
+                  Blocked
+                </span>
+              ) : (
+                <span className="inline-flex px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-700 border border-green-300">
+                  Not Blocked
+                </span>
+              )
             )}
             {infoItem(
               <User className="w-5 h-5" />,
               "User Rank",
               selectedUser.rank || "No Rank"
+            )}
+            {infoItem(
+              <Phone className="w-5 h-5" />,
+              "Phone Number",
+              selectedUser.phone || "Not Provided"
+            )}
+            {infoItem(
+              <Calendar className="w-5 h-5" />,
+              "Date of Birth",
+              selectedUser.dob
+                ? formatDate(selectedUser.dob, false)
+                : "Not Provided"
+            )}
+            {infoItem(
+              <MapPin className="w-5 h-5" />,
+              "Location",
+              selectedUser.location || "Not Provided"
             )}
             {infoItem(
               <Calendar className="w-5 h-5" />,
@@ -165,6 +204,19 @@ const ViewModal = ({ isOpen, onClose, selectedUser }) => {
                 className="w-full justify-center py-3 border-blue-200 text-blue-700 hover:bg-blue-100"
                 onClick={() => {
                   onClose();
+                  router.push(`/wallet-histories?userId=${selectedUser.id}`);
+                }}
+              >
+                <Wallet className="w-4 h-4 mr-2" />
+                View Wallet History
+              </Button>
+
+              <Button
+                variant="outline"
+                size="md"
+                className="w-full justify-center py-3 border-blue-200 text-blue-700 hover:bg-blue-100"
+                onClick={() => {
+                  onClose();
                   router.push(`/stakings?userId=${selectedUser.id}`);
                 }}
               >
@@ -190,7 +242,8 @@ const ViewModal = ({ isOpen, onClose, selectedUser }) => {
               <Button
                 variant={selectedUser.isBlocked ? "success" : "danger"}
                 size="md"
-                className="w-full justify-center py-3"
+                className="w-full justify-center py-3 disabled:opacity-50"
+                disabled={toggleMutation.isPending}
                 onClick={async () => {
                   onClose();
 
@@ -218,7 +271,9 @@ const ViewModal = ({ isOpen, onClose, selectedUser }) => {
                   }
                 }}
               >
-                {selectedUser.isBlocked ? (
+                {toggleMutation.isPending ? (
+                  <span>Processing...</span>
+                ) : selectedUser.isBlocked ? (
                   <>
                     <Unlock className="w-4 h-4 mr-2" />
                     Unblock User
