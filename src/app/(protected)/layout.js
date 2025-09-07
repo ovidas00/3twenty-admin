@@ -238,7 +238,7 @@ const Layout = ({ children }) => {
 
         {/* Content */}
         <main className="flex-1 overflow-y-auto bg-gray-50">
-          <div className="min-h-full pt-4">{children}</div>
+          <div className="min-h-full">{children}</div>
         </main>
       </div>
     </div>
