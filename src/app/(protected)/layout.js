@@ -219,16 +219,16 @@ const Layout = ({ children }) => {
 
       {/* Main area */}
       <div className="flex-1 flex flex-col overflow-hidden">
-        {/* Header */}
-        <header className="flex-shrink-0 h-18 bg-gray-800 lg:bg-white border-b border-gray-700 lg:border-gray-200 flex items-center justify-between px-4 sm:px-6 lg:px-8">
+        {/* Header with blur effect and dark background on mobile */}
+        <header className="sticky top-0 z-30 flex-shrink-0 h-18 bg-gray-800 md:bg-white/80 backdrop-blur-md border-b border-gray-700 md:border-gray-200 flex items-center justify-between px-4 sm:px-6 lg:px-8">
           <div className="flex items-center">
             <button
               onClick={() => setSidebarOpen(true)}
-              className="lg:hidden p-2 rounded-md text-gray-300 lg:text-gray-600 hover:text-gray-100 lg:hover:text-gray-900 hover:bg-gray-700 lg:hover:bg-gray-100 cursor-pointer"
+              className="lg:hidden p-2 rounded-md text-gray-300 md:text-gray-600 hover:text-gray-100 md:hover:text-gray-900 hover:bg-gray-700 md:hover:bg-gray-100 cursor-pointer"
             >
               <Menu className="h-5 w-5" />
             </button>
-            <h1 className="ml-4 text-xl md:hidden font-semibold text-white lg:text-gray-900">
+            <h1 className="ml-4 text-xl md:hidden font-semibold text-white md:text-gray-900">
               Dashboard
             </h1>
           </div>
@@ -236,7 +236,7 @@ const Layout = ({ children }) => {
 
         {/* Content */}
         <main className="flex-1 overflow-y-auto bg-gray-50">
-          <div className="min-h-full">{children}</div>
+          <div className="min-h-full pt-4">{children}</div>
         </main>
       </div>
     </div>

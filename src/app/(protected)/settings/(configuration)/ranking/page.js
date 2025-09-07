@@ -14,7 +14,7 @@ import {
   Crown,
   Star,
   Target,
-  Coins,
+  DollarSign,
 } from "lucide-react";
 
 const RankingPage = () => {
@@ -118,7 +118,7 @@ const RankingPage = () => {
                   required
                   icon={() => (
                     <span className="text-gray-400">
-                      <Coins className="w-4 h-4" />
+                      <DollarSign className="w-4 h-4" />
                     </span>
                   )}
                   className="w-full"
