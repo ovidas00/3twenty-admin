@@ -45,6 +45,7 @@ const Layout = ({ children }) => {
         { name: "Staking Config", href: "/settings/staking" },
         { name: "Referral Config", href: "/settings/referral" },
         { name: "Ranking Config", href: "/settings/ranking" },
+        { name: "Founder Config", href: "/settings/founder" },
       ],
     },
   ];
