@@ -14,6 +14,7 @@ import {
   ChevronDown,
   Coins,
   Wallet,
+  Star,
 } from "lucide-react";
 import { useRouter, usePathname } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
@@ -35,6 +36,7 @@ const Layout = ({ children }) => {
     { name: "Transactions", href: "/transactions", icon: CreditCard },
     { name: "Wallet Histories", href: "/wallet-histories", icon: Wallet },
     { name: "Stakings", href: "/stakings", icon: Coins },
+    { name: "Founder Pool", href: "/founder-pool", icon: Star },
     { name: "Phases", href: "/phases", icon: Layers },
     {
       name: "Settings",
