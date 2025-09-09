@@ -18,6 +18,7 @@ import {
   Phone,
   Wallet,
   MapPin,
+  Crown,
 } from "lucide-react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import api from "@/lib/api";
@@ -74,11 +75,20 @@ const ViewModal = ({ isOpen, onClose, selectedUser }) => {
         <div className="flex-1">
           {/* Profile Header */}
           <div className="flex items-center gap-4 mb-4">
-            <img
-              src={selectedUser.profilePicture || "/default-avatar.png"}
-              alt={selectedUser.name}
-              className="w-16 h-16 rounded-full border shadow"
-            />
+            <div className="relative">
+              <img
+                src={selectedUser.profilePicture || "/default-avatar.png"}
+                alt={selectedUser.name}
+                className="w-16 h-16 rounded-full border shadow"
+              />
+              {selectedUser.isFounder ? (
+                <Crown
+                  className="w-6 h-6 p-1 absolute -right-1 bottom-1 bg-amber-500 rounded-full text-white"
+                />
+              ) : (
+                ""
+              )}
+            </div>
             <div>
               <h2 className="text-lg font-semibold">{selectedUser.name}</h2>
               <p className="text-sm text-gray-500">
