@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useRouter, useSearchParams } from "next/navigation";
 import api from "@/lib/api";
-import { Filter, FileText, File, CheckCircle } from "lucide-react";
+import { Filter, FileText, File, CheckCircle, XCircle } from "lucide-react";
 import Button from "@/components/ui/Button";
 import Select from "@/components/ui/Select";
 import Swal from "sweetalert2";
@@ -76,6 +76,15 @@ const FounderPoolPage = () => {
 
   const approveMutation = useMutation({
     mutationFn: (id) => api.post(`/founder-pool/${id}/approve`),
+    onSuccess: (response) => {
+      toast.success(response.data.message);
+      queryClient.invalidateQueries({ queryKey: ["founderPools"] });
+    },
+    onError: (error) => toast.error(error.response?.data?.message),
+  });
+
+  const rejectMutation = useMutation({
+    mutationFn: (id) => api.post(`/founder-pool/${id}/reject`),
     onSuccess: (response) => {
       toast.success(response.data.message);
       queryClient.invalidateQueries({ queryKey: ["founderPools"] });
@@ -248,6 +257,31 @@ const FounderPoolPage = () => {
                               });
                               if (result.isConfirmed) {
                                 approveMutation.mutate(fp.id);
+                              }
+                            }}
+                          ></Button>
+
+                          <Button
+                            variant={
+                              fp.status !== "Pending" ? "secondary" : "outline"
+                            }
+                            size="md"
+                            icon={<XCircle className="w-4 h-4" />}
+                            disabled={fp.status !== "Pending"}
+                            onClick={async () => {
+                              if (fp.status !== "Pending") return;
+                              const result = await Swal.fire({
+                                title: "Reject Founder Request?",
+                                text: "This will update the user as founder status and refund investment.",
+                                icon: "warning",
+                                showCancelButton: true,
+                                confirmButtonText: "Yes, reject!",
+                                cancelButtonText: "Cancel",
+                                confirmButtonColor: "#f84c4cff",
+                                reverseButtons: true,
+                              });
+                              if (result.isConfirmed) {
+                                rejectMutation.mutate(fp.id);
                               }
                             }}
                           ></Button>
