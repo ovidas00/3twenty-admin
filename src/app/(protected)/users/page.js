@@ -270,7 +270,7 @@ const UsersPage = () => {
                           {user.email}
                         </td>
                         <td className="px-6 py-4 text-sm text-gray-900">
-                          {user.referrer?.name || "N/A"}
+                          {user["referrer.name"] || "N/A"}
                         </td>
                         <td className="px-6 py-4 text-sm text-gray-900 font-medium text-center">
                           {new Intl.NumberFormat().format(user.token)}
