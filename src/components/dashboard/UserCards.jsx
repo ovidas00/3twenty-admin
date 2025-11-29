@@ -49,7 +49,7 @@ const UserCards = () => {
   ];
 
   return (
-    <div className="rounded-xl bg-white p-6 shadow-sm border border-gray-200">
+    <div className="bg-white p-6 border border-gray-200 shadow-md">
       <div className="mb-6">
         <h2 className="text-xl font-semibold text-gray-800">User Overview</h2>
         <p className="text-sm text-gray-500 mt-1">

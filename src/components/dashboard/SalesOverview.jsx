@@ -45,7 +45,7 @@ const SalesDashboard = () => {
     <div className="max-w-7xl mx-auto space-y-6">
       <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.4fr] gap-6">
         {/* Sales Overview */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+        <div className="bg-white border border-gray-200 shadow-md p-6">
           <h2 className="text-xl font-semibold text-gray-800 mb-6">
             Sales Overview
           </h2>
@@ -104,7 +104,7 @@ const SalesDashboard = () => {
         </div>
 
         {/* Active Phase Overview */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+        <div className="bg-white border border-gray-200 shadow-md p-6">
           <h2 className="text-xl font-semibold text-gray-800 mb-6">
             Active Phase Overview
           </h2>

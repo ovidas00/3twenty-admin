@@ -57,7 +57,7 @@ const FinanceOverview = () => {
     const arrowColor = type === "Deposit" ? "bg-green-500" : "bg-red-500";
 
     return (
-      <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 transition-all duration-200 hover:shadow-md">
+      <div className="bg-white border border-gray-200 shadow-md p-6 transition-all duration-200 hover:shadow-md">
         <div className="mb-6">
           <h2 className="text-xl font-semibold text-gray-800">{title}</h2>
           <p className="text-sm text-gray-500 mt-1">
