@@ -188,8 +188,17 @@ const StakingPage = () => {
                       key={staking.id}
                       className="hover:bg-gray-50 transition-colors duration-150"
                     >
-                      <td className="px-6 py-4 text-sm text-gray-900">
-                        {staking.user?.name}
+                      <td className="px-6 py-4">
+                        <div className="flex items-center gap-3">
+                          <div className="flex flex-col">
+                            <span className="text-sm font-medium text-gray-900">
+                              {staking.user?.name}
+                            </span>
+                            <span className="text-xs text-gray-500">
+                              {staking.user?.email}
+                            </span>
+                          </div>
+                        </div>
                       </td>
                       <td className="px-6 py-4 text-sm text-gray-900 font-medium">
                         {formatAmount(staking.amount)}

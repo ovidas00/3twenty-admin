@@ -191,8 +191,17 @@ const FounderPoolPage = () => {
                       key={fp.id}
                       className="hover:bg-gray-50 transition-colors duration-150"
                     >
-                      <td className="px-6 py-4 text-sm text-gray-900">
-                        {fp["user.name"]}
+                      <td className="px-6 py-4">
+                        <div className="flex items-center gap-3">
+                          <div className="flex flex-col">
+                            <span className="text-sm font-medium text-gray-900">
+                              {fp["user.name"]}
+                            </span>
+                            <span className="text-xs text-gray-500">
+                              {fp["user.email"]}
+                            </span>
+                          </div>
+                        </div>
                       </td>
                       <td className="px-6 py-4 text-sm text-gray-900">
                         {fp.fullName}
