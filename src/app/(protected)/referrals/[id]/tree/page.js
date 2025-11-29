@@ -18,21 +18,21 @@ const ReferralTreePage = ({ params }) => {
   });
 
   const processTreeData = (treeData) => {
-  const levels = [[], [], [], [], [], []]; // Level 1–6
-  for (let i = 1; i <= 6; i++) {
-    if (treeData[String(i)]) {
-      levels[i - 1] = treeData[String(i)];
+    const levels = [[], [], [], [], [], []]; // Level 1–6
+    for (let i = 1; i <= 6; i++) {
+      if (treeData[String(i)]) {
+        levels[i - 1] = treeData[String(i)];
+      }
     }
-  }
-  return levels;
-};
+    return levels;
+  };
 
   const levels = data ? processTreeData(data, id) : [[], [], [], [], [], []];
 
   return (
     <div className="p-4 md:p-6">
       <div className="max-w-7xl mx-auto">
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200">
+        <div className="bg-white border border-gray-200 shadow-md">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 p-6 border-b border-gray-200">
             <div>
               <h2 className="text-xl font-semibold text-gray-800">

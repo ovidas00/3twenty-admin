@@ -45,7 +45,7 @@ const ActivationPage = () => {
   };
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+    <div className="bg-white border border-gray-200 shadow-md p-6">
       {/* Header */}
       <div className="flex items-center gap-3 mb-6">
         <div className="p-2 bg-blue-100 rounded-lg">

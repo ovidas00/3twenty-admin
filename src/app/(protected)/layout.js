@@ -20,6 +20,7 @@ import { useRouter, usePathname } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import api from "@/lib/api";
 import Image from "next/image";
+import Link from "next/link";
 
 const Layout = ({ children }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -102,7 +103,7 @@ const Layout = ({ children }) => {
     <div className="h-screen flex bg-gray-100 overflow-hidden">
       {/* Sidebar */}
       <div
-        className={`fixed inset-y-0 left-0 z-50 w-64 bg-gray-800 text-gray-200 flex flex-col transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-0 ${
+        className={`fixed inset-y-0 left-0 z-50 w-64 bg-[#1c2333] text-gray-200 flex flex-col transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-0 ${
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
@@ -150,7 +151,7 @@ const Layout = ({ children }) => {
                   >
                     <div className="border-l border-gray-600 pl-4 space-y-1">
                       {item.children.map((child) => (
-                        <a
+                        <Link
                           key={child.name}
                           href={child.href}
                           className={`block px-3 py-2 rounded-md font-medium relative ${
@@ -160,7 +161,7 @@ const Layout = ({ children }) => {
                           }`}
                         >
                           <span>{child.name}</span>
-                        </a>
+                        </Link>
                       ))}
                     </div>
                   </div>
@@ -169,7 +170,7 @@ const Layout = ({ children }) => {
             }
 
             return (
-              <a
+              <Link
                 key={item.name}
                 href={item.href}
                 className={`group flex items-center px-3 py-2.5 font-medium rounded-md ${
@@ -186,7 +187,7 @@ const Layout = ({ children }) => {
                   }`}
                 />
                 <span>{item.name}</span>
-              </a>
+              </Link>
             );
           })}
         </div>
@@ -240,7 +241,7 @@ const Layout = ({ children }) => {
         </header>
 
         {/* Content */}
-        <main className="flex-1 overflow-y-auto bg-gray-50">
+        <main className="flex-1 overflow-y-auto bg-[#f2f6fa] md:p-2">
           <div className="min-h-full">{children}</div>
         </main>
       </div>

@@ -106,7 +106,7 @@ const WalletPage = () => {
       />
 
       <div className="p-4 md:p-6 max-w-7xl mx-auto">
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200">
+        <div className="bg-white border border-gray-200 shadow-md">
           {/* Filters */}
           <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 p-6 border-b border-gray-200">
             <div>

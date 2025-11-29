@@ -22,7 +22,7 @@ const ConfigurationLayout = ({ children }) => {
     <div className="p-4 md:p-6">
       <div className="max-w-6xl mx-auto">
         {/* Shared Header */}
-        <div className="bg-white p-6 mb-6 rounded-xl shadow-sm border border-gray-200">
+        <div className="bg-white p-6 mb-6 border border-gray-200 shadow-md">
           <h1 className="text-2xl font-bold text-gray-900 mb-2">
             System Configuration
           </h1>
