@@ -68,6 +68,16 @@ const ViewModal = ({ isOpen, onClose, selectedUser }) => {
       toast.error(error.response?.data?.message || error.message),
   });
 
+  const toggleVerified = useMutation({
+    mutationFn: (id) => api.post(`/users/${id}/toggle-verify`),
+    onSuccess: (response) => {
+      queryClient.invalidateQueries({ queryKey: ["users"] });
+      toast.success(response.data.message);
+    },
+    onError: (error) =>
+      toast.error(error.response?.data?.message || error.message),
+  });
+
   return (
     <Modal isOpen={isOpen} onClose={onClose} title="User Details" size="lg">
       <div className="flex flex-col lg:flex-row gap-6 p-2">
@@ -79,29 +89,38 @@ const ViewModal = ({ isOpen, onClose, selectedUser }) => {
               <img
                 src={selectedUser.profilePicture || "/default-avatar.png"}
                 alt={selectedUser.name}
-                className="w-16 h-16 rounded-full border shadow"
+                className="w-16 h-16 rounded-full border shadow object-cover"
               />
               {selectedUser.isFounder ? (
-                <Crown
-                  className="w-6 h-6 p-1 absolute -right-1 bottom-1 bg-amber-500 rounded-full text-white"
-                />
+                <Crown className="w-6 h-6 p-1 absolute -right-1 bottom-1 bg-amber-500 rounded-full text-white" />
               ) : (
                 ""
               )}
             </div>
+
             <div>
               <h2 className="text-lg font-semibold">{selectedUser.name}</h2>
-              <p className="text-sm text-gray-500">
+              <p className="text-sm text-gray-500 flex">
                 {selectedUser.email}
-                {selectedUser.isVerified ? (
-                  <span className="ml-2 inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-700 border border-green-300">
-                    Verified
-                  </span>
-                ) : (
-                  <span className="ml-2 inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-700 border border-red-300">
-                    Not Verified
-                  </span>
-                )}
+                <div
+                  className="cursor-pointer"
+                  onClick={() => {
+                    if (confirm("Toggle Verified?")) {
+                      onClose();
+                      toggleVerified.mutate(selectedUser.id);
+                    }
+                  }}
+                >
+                  {selectedUser.isVerified ? (
+                    <span className="ml-2 inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-700 border border-green-300">
+                      Verified
+                    </span>
+                  ) : (
+                    <span className="ml-2 inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-700 border border-red-300">
+                      Not Verified
+                    </span>
+                  )}
+                </div>
               </p>
             </div>
           </div>
@@ -116,8 +135,20 @@ const ViewModal = ({ isOpen, onClose, selectedUser }) => {
             {infoItem(
               <User className="w-5 h-5" />,
               "Referrer",
-              selectedUser.referrer?.name || "No Referrer"
+              selectedUser["referrer.name"] ? (
+                <div className="flex flex-col">
+                  <span className="font-medium text-gray-900">
+                    {selectedUser["referrer.name"]}
+                  </span>
+                  <span className="text-xs font-normal text-gray-600">
+                    {selectedUser["referrer.email"]}
+                  </span>
+                </div>
+              ) : (
+                "No Referrer"
+              )
             )}
+
             {infoItem(
               selectedUser.isActive ? (
                 <CheckCircle className="w-5 h-5 text-green-500" />

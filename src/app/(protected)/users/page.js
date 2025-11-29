@@ -214,10 +214,7 @@ const UsersPage = () => {
                       ID
                     </th>
                     <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Name
-                    </th>
-                    <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Email
+                      User
                     </th>
                     <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Referrer
@@ -231,9 +228,6 @@ const UsersPage = () => {
                     <th className="px-6 py-4 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Status
                     </th>
-                    {/* <th className="px-6 py-4 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Joined
-                    </th> */}
                     <th className="px-6 py-4 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Actions
                     </th>
@@ -242,10 +236,9 @@ const UsersPage = () => {
 
                 <tbody className="divide-y divide-gray-200">
                   {isLoading ? (
-                    // Loading skeleton
                     Array.from({ length: 5 }).map((_, index) => (
                       <tr key={index}>
-                        {Array.from({ length: 8 }).map((_, cellIndex) => (
+                        {Array.from({ length: 7 }).map((_, cellIndex) => (
                           <td key={cellIndex} className="px-6 py-4">
                             <div className="h-4 bg-gray-200 rounded animate-pulse"></div>
                           </td>
@@ -261,23 +254,47 @@ const UsersPage = () => {
                         <td className="px-6 py-4 text-sm font-medium text-gray-900">
                           {user.id}
                         </td>
+
+                        {/* USER COLUMN */}
                         <td className="px-6 py-4">
-                          <span className="text-sm font-medium text-gray-900">
-                            {user.name}
-                          </span>
+                          <div className="flex items-center gap-3">
+                            <img
+                              src={user.profilePicture || "/default-avatar.png"}
+                              alt={user.name}
+                              className="w-10 h-10 rounded-full object-cover bg-gray-200"
+                            />
+                            <div className="flex flex-col">
+                              <span className="text-sm font-medium text-gray-900">
+                                {user.name}
+                              </span>
+                              <span className="text-xs text-gray-500">
+                                {user.email}
+                              </span>
+                            </div>
+                          </div>
                         </td>
+
                         <td className="px-6 py-4 text-sm text-gray-900">
-                          {user.email}
+                          <div className="flex flex-col">
+                            <span className="font-medium">
+                              {user["referrer.name"] || "N/A"}
+                            </span>
+                            {user["referrer.email"] && (
+                              <span className="text-xs text-gray-500">
+                                {user["referrer.email"]}
+                              </span>
+                            )}
+                          </div>
                         </td>
-                        <td className="px-6 py-4 text-sm text-gray-900">
-                          {user["referrer.name"] || "N/A"}
-                        </td>
+
                         <td className="px-6 py-4 text-sm text-gray-900 font-medium text-center">
-                          {new Intl.NumberFormat().format(user.token)}
+                          {Number(user.token).toFixed(2)}
                         </td>
+
                         <td className="px-6 py-4 text-sm font-medium text-gray-900 text-center">
                           {formatCurrency(parseFloat(user.usdt))}
                         </td>
+
                         <td className="px-6 py-4 text-center">
                           <span
                             className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${
@@ -289,9 +306,7 @@ const UsersPage = () => {
                             {user.isActive ? "Active" : "Inactive"}
                           </span>
                         </td>
-                        {/* <td className="px-6 py-4 text-sm whitespace-nowrap text-gray-900 text-center">
-                          {formatDate(user.createdAt)}
-                        </td> */}
+
                         <td className="px-6 py-4 whitespace-nowrap text-right">
                           <div className="flex items-center justify-end gap-2">
                             <Button
@@ -325,7 +340,7 @@ const UsersPage = () => {
                     ))
                   ) : (
                     <tr>
-                      <td colSpan="9" className="px-6 py-16 text-center">
+                      <td colSpan="7" className="px-6 py-16 text-center">
                         <div className="flex flex-col items-center justify-center space-y-3">
                           <Users className="w-16 h-16 text-gray-300" />
                           <div className="text-lg font-medium text-gray-500">

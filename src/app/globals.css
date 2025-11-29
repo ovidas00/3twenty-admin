@@ -1,5 +1,4 @@
 @import "tailwindcss";
-@custom-variant dark (&:where(.dark, .dark *));
 
 :root {
   --background: #ffffff;
@@ -13,13 +12,6 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
 body {
   background: var(--background);
   color: var(--foreground);
@@ -28,8 +20,8 @@ body {
 }
 
 ::-webkit-scrollbar {
-  width: 5px;   /* vertical scrollbar */
-  height: 5px;  /* horizontal scrollbar */
+  width: 5px; /* vertical scrollbar */
+  height: 5px; /* horizontal scrollbar */
 }
 
 /* Scrollbar track (background) */
@@ -40,7 +32,7 @@ body {
 /* Scrollbar thumb (draggable part) */
 ::-webkit-scrollbar-thumb {
   background-color: rgba(100, 100, 100, 0.5); /* semi-transparent gray */
-  border-radius: 5px;  /* rounded */
+  border-radius: 5px; /* rounded */
   border: 1px solid transparent; /* small padding effect */
 }
 
@@ -52,5 +44,5 @@ body {
 /* Firefox support */
 * {
   scrollbar-width: thin;
-  scrollbar-color: rgba(100,100,100,0.5) transparent;
+  scrollbar-color: rgba(100, 100, 100, 0.5) transparent;
 }
