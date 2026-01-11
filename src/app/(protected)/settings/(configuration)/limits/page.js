@@ -15,18 +15,30 @@ import {
   Upload,
   Coins,
   CreditCard,
+  Repeat,
 } from "lucide-react";
 
 const LimitsPage = () => {
-  const { minimumDeposit, minimumWithdraw, minimumBuyToken, withdrawCharge } =
-    useContext(ConfigContext) || {};
+  const {
+    minimumDeposit,
+    minimumWithdraw,
+    minimumBuyToken,
+    minimumSell,
+    minimumExchange,
+    withdrawCharge,
+    sellCharge, // ✅ added
+  } = useContext(ConfigContext) || {};
 
   const [formData, setFormData] = useState({
     minimumDeposit: 0,
     minimumWithdraw: 0,
     minimumBuyToken: 0,
+    minimumSell: 0,
+    minimumExchange: 0,
     withdrawCharge: 0,
+    sellCharge: 0, // ✅ added
   });
+
   const [message, setMessage] = useState(null);
 
   // Set initial form data from config
@@ -35,13 +47,27 @@ const LimitsPage = () => {
       minimumDeposit: minimumDeposit || 0,
       minimumWithdraw: minimumWithdraw || 0,
       minimumBuyToken: minimumBuyToken || 0,
+      minimumSell: minimumSell || 0,
+      minimumExchange: minimumExchange || 0,
       withdrawCharge: withdrawCharge || 0,
+      sellCharge: sellCharge || 0, // ✅ added
     });
-  }, [minimumDeposit, minimumWithdraw, minimumBuyToken, withdrawCharge]);
+  }, [
+    minimumDeposit,
+    minimumWithdraw,
+    minimumBuyToken,
+    minimumSell,
+    minimumExchange,
+    withdrawCharge,
+    sellCharge, // ✅ added
+  ]);
 
   const updateMutation = useMutation({
     mutationFn: () =>
-      api.put("/configs", { key: "DEPOSIT_SETTINGS", value: formData }),
+      api.put("/configs", {
+        key: "DEPOSIT_SETTINGS",
+        value: formData,
+      }),
     onSuccess: (response) => {
       setMessage({
         type: "success",
@@ -70,18 +96,20 @@ const LimitsPage = () => {
         return <Upload className="w-4 h-4 text-green-600" />;
       case "minimumBuyToken":
         return <Coins className="w-4 h-4 text-yellow-600" />;
+      case "minimumSell":
+        return <DollarSign className="w-4 h-4 text-red-600" />;
+      case "minimumExchange":
+        return <Repeat className="w-4 h-4 text-indigo-600" />;
       case "withdrawCharge":
+      case "sellCharge": // ✅ added
         return <CreditCard className="w-4 h-4 text-purple-600" />;
       default:
         return <DollarSign className="w-4 h-4 text-gray-400" />;
     }
   };
 
-  const formatLabel = (field) => {
-    return field
-      .replace(/([A-Z])/g, " $1")
-      .replace(/^./, (str) => str.toUpperCase());
-  };
+  const formatLabel = (field) =>
+    field.replace(/([A-Z])/g, " $1").replace(/^./, (str) => str.toUpperCase());
 
   return (
     <div className="max-w-6xl mx-auto">
@@ -110,7 +138,7 @@ const LimitsPage = () => {
             />
           )}
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {Object.entries(formData).map(([field, value]) => (
               <div key={field} className="space-y-3">
                 <Input
@@ -127,10 +155,12 @@ const LimitsPage = () => {
                   }
                   placeholder="0.00"
                   size="sm"
-                  required={true}
+                  required
                   icon={() => (
                     <span className="text-gray-400">
-                      {field === "withdrawCharge" ? "%" : "$"}
+                      {field === "withdrawCharge" || field === "sellCharge"
+                        ? "%"
+                        : "$"}
                     </span>
                   )}
                   className="w-full"
